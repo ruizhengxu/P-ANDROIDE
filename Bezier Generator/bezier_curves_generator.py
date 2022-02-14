@@ -14,7 +14,7 @@ import sys
 import os
 
 MAX_COOR = 200
-NB_CURVES = 500
+NB_CURVES = 4000
 
 INF = 60
 SUP = 90
