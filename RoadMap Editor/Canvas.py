@@ -14,15 +14,16 @@ class Canvas(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         
+
         # Draw sections
         for section in self.sections.values():
             i1 = self.intersections[section["intersection1"]]
             i2 = self.intersections[section["intersection2"]]
             control = section["control"]
-        
-            start_pt = QPoint(i1["x"], i1["y"])
-            end_pt = QPoint(i2["x"], i2["y"])
+
             control_pt = QPoint(control["x"], control["y"])
+            start_pt = QPoint(i1["x"], i1["y"])
+            end_pt = QPoint(i2["x"] , i2["y"])
             
             # Draw section's control point
             painter.setPen(QPen(Qt.red, INTERSECTION_WIDTH))
@@ -34,18 +35,57 @@ class Canvas(QWidget):
             path.quadTo(control_pt, end_pt)
             
             # Draw section's curve
-            painter.setPen(QPen(Qt.gray, SECTION_WIDTH))
+            painter.setPen(QPen(Qt.darkYellow, SECTION_WIDTH))
             painter.setBrush(QBrush(Qt.NoBrush))
             painter.drawPath(path)
+            painter.setPen(QPen(Qt.gray, SECTION_WIDTH - 5))
+            painter.setBrush(QBrush(Qt.NoBrush))
+            painter.drawPath(path)
+
+            # Draw middle
+            painter.setPen(QPen(Qt.darkYellow, 2))
+            painter.setBrush(QBrush(Qt.NoBrush))
+            painter.drawPath(path)
+
+        # Draw lines
+        for section in self.sections.values():
+            i1 = self.intersections[section["intersection1"]]
+            i2 = self.intersections[section["intersection2"]]
+            control = section["control"]
+
+            control_pt = QPoint(control["x"], control["y"])
+            start_pt = QPoint(i1["x"], i1["y"])
+            end_pt = QPoint(i2["x"] , i2["y"])
+
+            painter.setPen(QPen(QColor(100, 255, 50, 127), 2))
+            painter.setBrush(QBrush(Qt.red))
+            painter.drawLine(start_pt, end_pt)
+            painter.drawLine(start_pt, control_pt)
+            painter.drawLine(control_pt, end_pt)
+
             
-        painter.setPen(QPen(Qt.blue, INTERSECTION_WIDTH))
+        painter.setPen(QPen(Qt.blue, 37.5))
         painter.setBrush(QBrush(Qt.blue))
         # Draw intersections
         for intersection in self.intersections.values():
             pt = QPoint(intersection["x"], intersection["y"])
             painter.drawEllipse(pt, INTERSECTION_WIDTH, INTERSECTION_WIDTH)
-            
-       
+        
+        """
+        for s in self.sections.values():
+            i2 = self.intersections[s["intersection2"]]
+            for ss in self.sections.values():
+                i1 = self.intersections[ss["intersection1"]]
+                if i1 == i2:
+                    a = s["control"]
+                    c = ss["control"]
+                    b = i1
+
+                    start_pt = QPoint(a["x"], a["y"])
+                    end_pt = QPoint(c["x"], c["y"])
+                    control_pt = QPoint(b["x"], b["y"])
+        """
+                    
     def init_obj(self):
         self.intersections = {}
         self.sections = {}
@@ -64,6 +104,7 @@ class Canvas(QWidget):
         extracted_data = {}
         for obj in data:
             extracted_data[obj.pop("id")] = obj
+        print(extracted_data)
         return extracted_data
         
             

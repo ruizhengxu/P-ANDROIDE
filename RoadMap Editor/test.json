@@ -17,6 +17,18 @@
             "y": 188,
             "id": "i2",
             "experiences": []
+        },
+        {
+            "x": 860,
+            "y": 300,
+            "id": "i3",
+            "experiences": []
+        },
+        {
+            "x": 1100,
+            "y": 400,
+            "id": "i4",
+            "experiences": []
         }
     ],
     "sections": [
@@ -33,6 +45,20 @@
             "control": {"x": 400, "y": 48},
             "experiences": [],
             "id": "s1"
+        },
+        {
+            "intersection1": "i2",
+            "intersection2": "i3",
+            "control": {"x": 640, "y": 380},
+            "experiences": [],
+            "id": "s2"
+        },
+        {
+            "intersection1": "i3",
+            "intersection2": "i4",
+            "control": {"x": 940, "y": 280},
+            "experiences": [],
+            "id": "s3"
         }
     ],
     "robot": {
