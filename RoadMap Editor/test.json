@@ -1,0 +1,49 @@
+{
+    "intersections": [
+        {
+            "x": 30,
+            "y": 20,
+            "id": "i0",
+            "experiences": []
+        },
+        {
+            "x": 300,
+            "y": 100,
+            "id": "i1",
+            "experiences": []
+        },
+        {
+            "x": 460,
+            "y": 188,
+            "id": "i2",
+            "experiences": []
+        }
+    ],
+    "sections": [
+        {
+            "intersection1": "i0",
+            "intersection2": "i1",
+            "control": {"x": 360, "y": 360},
+            "experiences": [],
+            "id": "s0"
+        },
+        {
+            "intersection1": "i1",
+            "intersection2": "i2",
+            "control": {"x": 400, "y": 48},
+            "experiences": [],
+            "id": "s1"
+        }
+    ],
+    "robot": {
+        "name": "rHoA",
+        "intersection": "i0"
+    },
+    "drugStores": [
+        {
+            "name": "dg",
+            "intersection": "i1",
+            "id": "dg1"
+        }
+    ]
+}
