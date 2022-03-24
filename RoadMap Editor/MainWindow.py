@@ -12,7 +12,7 @@ LOG_FNAME = "log.txt"
 class MainWindow(QMainWindow):
 
     def __init__(self, parent = None ):
-        QMainWindow.__init__(self, parent )
+        QMainWindow.__init__(self, parent)
         
         screen = QApplication.primaryScreen()
         self.setGeometry(int(screen.size().width()/2)-int(WIDTH/2),
