@@ -17,6 +17,24 @@
             "y": 188,
             "id": "i2",
             "experiences": []
+        },
+        {
+            "x": 588,
+            "y": 222,
+            "id": "i3",
+            "experiences": []
+        },
+        {
+            "x": 345,
+            "y": 367,
+            "id": "i4",
+            "experiences": []
+        },
+        {
+            "x": 1077,
+            "y": 470,
+            "id": "i5",
+            "experiences": []
         }
     ],
     "sections": [
@@ -33,6 +51,27 @@
             "control": {"x": 400, "y": 48},
             "experiences": [],
             "id": "s1"
+        },
+        {
+            "intersection1": "i2",
+            "intersection2": "i3",
+            "control": {"x": 521, "y": 203},
+            "experiences": [],
+            "id": "s2"
+        },
+        {
+            "intersection1": "i3",
+            "intersection2": "i4",
+            "control": {"x": 681, "y": 351},
+            "experiences": [],
+            "id": "s3"
+        },
+        {
+            "intersection1": "i4",
+            "intersection2": "i5",
+            "control": {"x": 37, "y": 510},
+            "experiences": [],
+            "id": "s4"
         }
     ],
     "robot": {
@@ -43,7 +82,34 @@
         {
             "name": "dg",
             "intersection": "i1",
-            "id": "dg1"
+            "id": "dg0"
+        }
+    ],
+    "depots": [
+        {
+            "name": "depot",
+            "intersection": "i2",
+            "arucoCode": 0,
+            "arucoSide": "~SIDE_EAST",
+            "id": "de0"
+        }
+    ],
+    "garages": [
+        {
+            "name": "garage",
+            "intersection": "i3",
+            "arucoCode": 0,
+            "arucoSide": "~SIDE_EAST",
+            "id": "g0"
+        }
+    ],
+    "restaurants": [
+        {
+            "name": "restaurant",
+            "intersection": "i4",
+            "arucoCode": 0,
+            "arucoSide": "~SIDE_EAST",
+            "id": "r0"
         }
     ]
 }

@@ -1,0 +1,346 @@
+{
+  "SIDE_EAST": {
+    "code": 0,
+    "label": "East",
+    "angle": 0,
+    "_format": {
+      "code": "int",
+      "label": "string",
+      "angle": "float"
+    }
+  },
+  "SIDE_NORTH": {
+    "code": 1,
+    "label": "North",
+    "angle": 1.5707963267948966,
+    "_format": {
+      "code": "int",
+      "label": "string",
+      "angle": "float"
+    }
+  },
+  "SIDE_WEST": {
+    "code": 2,
+    "label": "West",
+    "angle": 3.141592653589793,
+    "_format": {
+      "code": "int",
+      "label": "string",
+      "angle": "float"
+    }
+  },
+  "SIDE_SOUTH": {
+    "code": 3,
+    "label": "South",
+    "angle": -1.5707963267948966,
+    "_format": {
+      "code": "int",
+      "label": "string",
+      "angle": "float"
+    }
+  },
+  "sides": [
+    "~SIDE_EAST",
+    "~SIDE_NORTH",
+    "~SIDE_WEST",
+    "~SIDE_SOUTH"
+  ],
+  "width": 3,
+  "height": 4,
+  "intersections": [
+    {
+      "l": 0,
+      "c": 0,
+      "experiences": [],
+      "$$hashKey": "object:14"
+    },
+    {
+      "l": 1,
+      "c": 0,
+      "experiences": [],
+      "$$hashKey": "object:17"
+    },
+    {
+      "l": 2,
+      "c": 0,
+      "experiences": [],
+      "$$hashKey": "object:20"
+    },
+    {
+      "l": 3,
+      "c": 0,
+      "experiences": [],
+      "$$hashKey": "object:23"
+    },
+    {
+      "l": 0,
+      "c": 1,
+      "experiences": [],
+      "$$hashKey": "object:15"
+    },
+    {
+      "l": 1,
+      "c": 1,
+      "experiences": [],
+      "$$hashKey": "object:18"
+    },
+    {
+      "l": 2,
+      "c": 1,
+      "experiences": [],
+      "$$hashKey": "object:21"
+    },
+    {
+      "l": 3,
+      "c": 1,
+      "experiences": [],
+      "$$hashKey": "object:24"
+    },
+    {
+      "l": 0,
+      "c": 2,
+      "experiences": [],
+      "$$hashKey": "object:16"
+    },
+    {
+      "l": 1,
+      "c": 2,
+      "experiences": [],
+      "$$hashKey": "object:19"
+    },
+    {
+      "l": 2,
+      "c": 2,
+      "experiences": [],
+      "$$hashKey": "object:22"
+    },
+    {
+      "l": 3,
+      "c": 2,
+      "experiences": [],
+      "$$hashKey": "object:25"
+    }
+  ],
+  "freeIntersections": [
+    "~intersections~1",
+    "~intersections~2",
+    "~intersections~3",
+    "~intersections~4",
+    "~intersections~5",
+    "~intersections~6",
+    "~intersections~7",
+    "~intersections~8",
+    "~intersections~9",
+    "~intersections~10",
+    "~intersections~11"
+  ],
+  "sections": [
+    {
+      "intersection1": "~intersections~0",
+      "intersection2": "~intersections~4",
+      "experiences": [],
+      "$$hashKey": "object:38"
+    },
+    {
+      "intersection1": "~intersections~0",
+      "intersection2": "~intersections~1",
+      "experiences": [],
+      "$$hashKey": "object:39"
+    },
+    {
+      "intersection1": "~intersections~1",
+      "intersection2": "~intersections~5",
+      "experiences": [],
+      "$$hashKey": "object:43"
+    },
+    {
+      "intersection1": "~intersections~1",
+      "intersection2": "~intersections~2",
+      "experiences": [],
+      "$$hashKey": "object:44"
+    },
+    {
+      "intersection1": "~intersections~2",
+      "intersection2": "~intersections~6",
+      "experiences": [],
+      "$$hashKey": "object:48"
+    },
+    {
+      "intersection1": "~intersections~2",
+      "intersection2": "~intersections~3",
+      "experiences": [],
+      "$$hashKey": "object:49"
+    },
+    {
+      "intersection1": "~intersections~3",
+      "intersection2": "~intersections~7",
+      "experiences": [],
+      "$$hashKey": "object:53"
+    },
+    {
+      "intersection1": "~intersections~4",
+      "intersection2": "~intersections~8",
+      "experiences": [],
+      "$$hashKey": "object:40"
+    },
+    {
+      "intersection1": "~intersections~4",
+      "intersection2": "~intersections~5",
+      "experiences": [],
+      "$$hashKey": "object:41"
+    },
+    {
+      "intersection1": "~intersections~5",
+      "intersection2": "~intersections~9",
+      "experiences": [],
+      "$$hashKey": "object:45"
+    },
+    {
+      "intersection1": "~intersections~5",
+      "intersection2": "~intersections~6",
+      "experiences": [],
+      "$$hashKey": "object:46"
+    },
+    {
+      "intersection1": "~intersections~6",
+      "intersection2": "~intersections~10",
+      "experiences": [],
+      "$$hashKey": "object:50"
+    },
+    {
+      "intersection1": "~intersections~6",
+      "intersection2": "~intersections~7",
+      "experiences": [],
+      "$$hashKey": "object:51"
+    },
+    {
+      "intersection1": "~intersections~7",
+      "intersection2": "~intersections~11",
+      "experiences": [],
+      "$$hashKey": "object:54"
+    },
+    {
+      "intersection1": "~intersections~8",
+      "intersection2": "~intersections~9",
+      "experiences": [],
+      "$$hashKey": "object:42"
+    },
+    {
+      "intersection1": "~intersections~9",
+      "intersection2": "~intersections~10",
+      "experiences": [],
+      "$$hashKey": "object:47"
+    },
+    {
+      "intersection1": "~intersections~10",
+      "intersection2": "~intersections~11",
+      "experiences": [],
+      "$$hashKey": "object:52"
+    }
+  ],
+  "drugStores": [],
+  "garages": [],
+  "restaurants": [],
+  "depots": [],
+  "zones": [],
+  "orders": [],
+  "experiences": [],
+  "speedChanges": [],
+  "roadBlocks": [],
+  "objectsEvent": [],
+  "robot": {
+    "name": "rHoA",
+    "intersection": "~intersections~0",
+    "_format": {
+      "name": "string",
+      "xacroParams": {
+        "camera": {
+          "update_rate": "int",
+          "frame_rate": "int",
+          "image_size_y": "int",
+          "image_size_z": "int",
+          "clip_near": "float",
+          "clip_far": "int",
+          "rotation_speed": "int"
+        },
+        "lidar": {
+          "update_rate": "int",
+          "scan_sample": "int",
+          "scan_resolution": "float",
+          "range_min": "float",
+          "range_max": "float",
+          "range_resolution": "float"
+        },
+        "proximity_sensor": {
+          "update_rate": "int",
+          "scan_sample": "int",
+          "scan_resolution": "float",
+          "scan_min_angle": "float",
+          "scan_max_angle": "float",
+          "range_min": "float",
+          "range_max": "float",
+          "range_resolution": "float"
+        }
+      }
+    },
+    "xacroParams": {
+      "camera": {
+        "update_rate": 30,
+        "frame_rate": 30,
+        "image_size_y": 1920,
+        "image_size_z": 1080,
+        "clip_near": 0.02,
+        "clip_far": 300,
+        "rotation_speed": 0
+      },
+      "lidar": {
+        "update_rate": 40,
+        "scan_sample": 720,
+        "scan_resolution": 1,
+        "range_min": 0.1,
+        "range_max": 30,
+        "range_resolution": 0.01
+      },
+      "proximity_sensor": {
+        "update_rate": 40,
+        "scan_sample": 40,
+        "scan_resolution": 1,
+        "scan_min_angle": 0.00872665,
+        "scan_max_angle": -0.00872665,
+        "range_min": 0.06,
+        "range_max": 0.15,
+        "range_resolution": 0.01
+      }
+    }
+  },
+  "name": "myMap",
+  "worldParams": {
+    "generalDimensions": {
+      "roomSize": 3,
+      "pathWayWidth": 1,
+      "pathWayLength": 3
+    },
+    "roomWall": {
+      "depth": 0.15,
+      "height": 1
+    },
+    "pathWayWall": {
+      "depth": 0.15,
+      "height": 1
+    },
+    "firstNodeOrigin": {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "_format": {
+        "x": "float",
+        "y": "float",
+        "z": "float"
+      }
+    }
+  },
+  "_format": {
+    "width": "int",
+    "height": "int"
+  }
+}
