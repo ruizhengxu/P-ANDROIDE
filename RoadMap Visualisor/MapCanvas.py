@@ -50,7 +50,6 @@ class MapCanvas(QWidget):
     def mousePressEvent(self, event):
         self.selected_section = self.get_pointed_element(event.pos(), only_section=True)
         if self.selected_section != "":
-            print(self.intersections)
             self.parent().show_road(self.selected_section)
         self.update()
         

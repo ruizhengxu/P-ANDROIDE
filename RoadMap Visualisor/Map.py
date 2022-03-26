@@ -40,19 +40,17 @@ class Map(QWidget):
         
         # Road Window
         self.road_window = Road()
-            
+        self.road_window.show()
+
     def read_json(self, file_name):
         return Utils.read_json(file_name)
             
     def render_map(self, folder_path, file_name):
         self.folder_path = folder_path
-        file_data = self.read_json(folder_path+file_name)
-        map_data = self.read_json(folder_path+self.file_data["map"])
-        
-        self.map_name.setText(file_data["map"])
+        self.file_data = self.read_json(folder_path + file_name)
+        map_data = self.read_json(self.folder_path + self.file_data["map"])
+        self.map_name.setText(self.file_data["map"])
         self.map_canvas.render(map_data)
-        
-        self.road_window.show()
 
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)

@@ -28,13 +28,14 @@ class Road(QWidget):
         
         self.init_road_canvas()
         self.init_road_properties()
-        self.statusBar = QStatusBar()
+        self.statusbar = QStatusBar()
+        self.statusbar.showMessage("Ready")
         
         self.top_layout.addWidget(self.road_name, stretch=1, alignment=Qt.AlignCenter)
         self.top_layout.addWidget(self.road_canvas, stretch=85)
         self.top_layout.addWidget(self.road_properties, stretch=14)
         self._layout.addLayout(self.top_layout)
-        self._layout.addWidget(self.statusBar)
+        self._layout.addWidget(self.statusbar)
 
         self.setLayout(self._layout)
         
@@ -76,9 +77,11 @@ class Road(QWidget):
     def render_road(self, folder_path, file_name, section_name):
         section_data = self.load_road(folder_path+file_name)
         self.road_name.setText(section_name)
-        
+
         self.road_canvas.render(section_data)
     
     def load_road(self, file_name):
         return Utils.read_json(file_name)
     
+    def setMessage(self, msg):
+        self.statusbar.showMessage(msg)
