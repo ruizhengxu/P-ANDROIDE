@@ -75,3 +75,6 @@ def slice(source,target,A4=A4,resize=resize,width_line=line_width):
             subimg = image[y*A4[1]:(y+1)*A4[1],x*A4[0]:(x+1)*A4[0],:]
             if(np.max(subimg) > 0): # Sauvegarder seulement si l'image nest pas vide
                 Image.fromarray(subimg).save(target+str(y)+"_"+str(x)+".png")
+
+    # Save the entire road
+    # img.save(source[:-5]+".png")
