@@ -9,6 +9,15 @@ SECTION_WIDTH = 5
 L_SPACING = 120
 C_SPACING = 300
 
+ELEMENT_COLOR = {
+    "ROBOT": Qt.blue,
+    "DRUG STORES": Qt.green,
+    "GARAGES": Qt.white,
+    "RESTAURANTS": Qt.red,
+    "DEPOTS": Qt.magenta,
+    "ZONES": Qt.yellow,
+}
+
 class MapCanvas(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
@@ -46,6 +55,23 @@ class MapCanvas(QWidget):
             painter.drawEllipse(QPoint(i["x"], i["y"]), INTERSECTION_WIDTH, INTERSECTION_WIDTH)
             painter.setPen(QPen(Qt.black))
             painter.drawText(QPoint(int(i["x"]-offset), int(i["y"]+offset)), str(i["l"])+","+str(i["c"]))
+        
+        # Draw elements
+        for key, element in self.all_elements.items():
+            ele = element[0]
+            show = element[1]
+            if len(ele) > 0 and show:
+                painter.setPen(QPen(ELEMENT_COLOR[key]))
+                painter.setBrush(QBrush(ELEMENT_COLOR[key]))
+                if type(ele) == dict: # If element is robot
+                    i = self.intersections[ele["intersection"]] # Intersection of the element
+                    painter.drawEllipse(QPoint(i["x"], i["y"]), INTERSECTION_WIDTH/3, INTERSECTION_WIDTH/3)
+                else: # Others elements
+                    for e in ele:
+                        i = self.intersections[e["intersection"]] # Intersection of the element
+                        painter.drawEllipse(QPoint(i["x"], i["y"]), INTERSECTION_WIDTH/3, INTERSECTION_WIDTH/3)
+                        
+        
     
     def mousePressEvent(self, event):
         self.selected_section = self.get_pointed_element(event.pos(), only_section=True)
@@ -59,11 +85,13 @@ class MapCanvas(QWidget):
     def init_obj(self):
         self.sections = {}
         self.intersections = {}
+        self.all_elements = {}
         self.selected_section = ""
     
     def render(self, map_data):
         self.get_sections(map_data)
         self.get_intersections(map_data)
+        self.get_map_elements(map_data)
         self.update()
         
     def get_sections(self, map_data):
@@ -76,6 +104,22 @@ class MapCanvas(QWidget):
             intersection["x"] = (intersection["c"]+1)*C_SPACING
             intersection["y"] = (intersection["l"]+1)*L_SPACING
             self.intersections["~intersections~" + str(i)] = intersection
+            
+    def get_map_elements(self, map_data):
+        robot = map_data["robot"]
+        drugStores = map_data["drugStores"]
+        garages = map_data["garages"]
+        restaurants = map_data["restaurants"]
+        depots = map_data["depots"]
+        zones = map_data["zones"]
+        self.all_elements = {
+            "ROBOT": [robot, True],
+            "DRUG STORES": [drugStores, False],
+            "GARAGES": [garages, False],
+            "RESTAURANTS": [restaurants, False],
+            "DEPOTS": [depots, False],
+            "ZONES": [zones, False]
+        }
             
     def get_pointed_element(self, point, only_section=False):
         pointed_element = ""
@@ -98,4 +142,10 @@ class MapCanvas(QWidget):
                 if ele.contains(point): pointed_element = key
         
         return pointed_element
-                
+    
+    def show_element(self, element, show):
+        tmp = self.all_elements[element]
+        tmp[1] = show
+        self.all_elements[element] = tmp
+            
+        self.update()

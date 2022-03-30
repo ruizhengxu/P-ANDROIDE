@@ -38,12 +38,20 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.stack)
       
     def main_window(self):
+        self.map = None
         self.stack.setCurrentWidget(self.start_window)
+        
+    def init_map(self):
+        self.map = Map()
+        self.map.mainMenu_button.clicked.connect(self.main_window)
     
     def show_map(self):
         try:
+            if self.map is None:
+                self.init_map()
             self.folder_path, self.file_name = self.get_file()
             self.map.render_map(self.folder_path, self.file_name)
+            self.stack.addWidget(self.map)
             self.stack.setCurrentWidget(self.map)
         except Exception as e:
             print("File error :", e.__doc__)
