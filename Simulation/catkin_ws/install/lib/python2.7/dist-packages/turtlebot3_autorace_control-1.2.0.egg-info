@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: turtlebot3_autorace_control
+Version: 1.2.0
+Summary: TurtleBot3 AutoRace ROS package that controls TurtleBot3 Auto
+Home-page: http://wiki.ros.org/turtlebot3_autorace_control
+Author: Pyo <pyo@robotis.com>, Gilbert <kkjong@robotis.com>
+Author-email: UNKNOWN
+License: Apache 2.0
+Description: UNKNOWN
+Platform: UNKNOWN
