@@ -9,7 +9,7 @@ Lors d'une première utilisation, il est nécessaire de taper les deux commandes
 Pour initialiser catkin taper la commande : `bash setup_catkin.sh` depuis le dossier `Visualisor/`.
 
 ### Modification des fichiers de catkin
-Pour adapter les fichiers dans `catkin_ws/` à notre projet taper la commande : `bash setup_project.sh` depuis le dossier `Visualisor/`.
+Pour adapter les fichiers dans `catkin_ws/` à notre projet taper la commande : `bash modif_catkin.sh` depuis le dossier `Visualisor/`.
 
 
 
