@@ -1,4 +1,5 @@
-import Utils
+import Utils, os
+from pathlib import Path
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -12,6 +13,8 @@ OFFSET = 30
 class Road(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
+        self.setAttribute(Qt.WA_QuitOnClose, False)
+
         self.setWindowTitle("Road Visualisor")
         screen = QApplication.primaryScreen()
         self.setGeometry(int(screen.size().width()/2)-int(WIDTH/2)+OFFSET,
@@ -23,17 +26,25 @@ class Road(QWidget):
         
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
+        self.bottom_layout = QHBoxLayout()
+        self.bottom_layout.setContentsMargins(0, 0, 0, 0)
         self.top_layout = QVBoxLayout()
         self.top_layout.setContentsMargins(10, 5, 10, 5)
         
         self.init_road_canvas()
         self.init_road_properties()
+        self.simulate_btn = QPushButton("Simulate")
+        self.simulate_btn.clicked.connect(self.simulate)
+
         self.statusbar = QStatusBar()
         self.statusbar.showMessage("Ready")
+
+        self.bottom_layout.addWidget(self.road_properties, stretch=85)
+        self.bottom_layout.addWidget(self.simulate_btn, stretch=15)
         
         self.top_layout.addWidget(self.road_name, stretch=1, alignment=Qt.AlignCenter)
         self.top_layout.addWidget(self.road_canvas, stretch=85)
-        self.top_layout.addWidget(self.road_properties, stretch=14)
+        self.top_layout.addLayout(self.bottom_layout, stretch=14)
         self._layout.addLayout(self.top_layout)
         self._layout.addWidget(self.statusbar)
 
@@ -74,14 +85,24 @@ class Road(QWidget):
         self.road_properties.addTab(tab1, "&Table")
         self.road_properties.addTab(tab2, "Text &Edit")
         
-    def render_road(self, folder_path, file_name, section_name):
+    def render_road(self, folder_path, file_name):
         section_data = self.load_road(folder_path+file_name)
-        self.road_name.setText(section_name)
+        self.road_name.setText(file_name)
 
         self.road_canvas.render(section_data)
     
     def load_road(self, file_name):
         return Utils.read_json(file_name)
     
+    def simulate(self):
+        path = os.path.abspath(__file__)
+        path = str(Path(path).parent)
+        start_path = path + "/../start.sh"
+        os.system("bash " + start_path + " &")
+        print("robot launch with success")
+
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)
+
+    def closeEvent(self, event):
+        self.road_canvas.ev1.clear()

@@ -10,6 +10,7 @@ import json
 import threading
 import time
 import numpy as np
+import os
 
 class RoadCanvas(QWidget):
     
@@ -23,11 +24,16 @@ class RoadCanvas(QWidget):
         self.init_obj()
 
         self.data = None
-        t = threading.Thread(target=self.get_data_from_file)
-        t.start()
+        self.ev1 = threading.Event()
+        self.ev1.set()
+
+        self.T = threading.Thread(target=self.get_data_from_file)
+        self.T.start()
     
     def get_data_from_file(self) -> None:
+
         while True:
+            if not self.ev1.wait(0): break 
             try:
                 fp = open('data.json')
                 self.data = json.load(fp)
@@ -52,7 +58,7 @@ class RoadCanvas(QWidget):
                 pt2 = QPointF(self.white_pts[i+1]["x"], self.white_pts[i+1]["y"])
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
-            # path.clear()
+            path.clear()
             
             path.moveTo(QPointF(self.yellow_pts[0]["x"], self.yellow_pts[0]["y"]))
             for i in range(0, len(self.yellow_pts), 2):
@@ -62,13 +68,13 @@ class RoadCanvas(QWidget):
                 pt2 = QPointF(self.yellow_pts[i+1]["x"], self.yellow_pts[i+1]["y"])
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
-            # path.clear()
+            path.clear()
         
         #print(self.data)
         #painter.setPen(Qt.yellow)
         #painter.setBrush(Qt.yellow)
         if self.data != None:
-            print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
+            # print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
             painter.drawEllipse(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ((ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)), 5, 5)
 
         #self.update()

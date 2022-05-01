@@ -19,7 +19,8 @@ MAP_ELEMENTS = {
 
 class Map(QWidget):
     def __init__(self, parent=None):
-        super(QWidget, self).__init__(parent)
+        super(QWidget, self).__init__(parent) 
+        self.setAttribute(Qt.WA_QuitOnClose, False)
         
         self.file_data = {}
         self.map_data = {}
@@ -82,28 +83,32 @@ class Map(QWidget):
 
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)
-        
-    def show_road(self, section_name):
-        file_name = self.file_data["sections"][section_name]
 
+    def get_road_data(self, section_name):
+        file_name = self.file_data["sections"][section_name]
+        return file_name, Utils.read_json(self.folder_path+file_name)
+        
+    def show_road(self, road_name):
         path = os.path.abspath(__file__)
         path = str(Path(path).parent)
         setup_map_path = path + "/../map/setup_map.py"
-        file_path = path + "/data/" + file_name
+        file_path = path + "/data/" + road_name
         setup_path = path + "/../setup.sh"
-        start_path = path + "/../start.sh"
+
+        # Handle debug mod
+        if len(sys.argv) > 1:
+            if sys.argv[1] == "-d":
+                setup_path += " -d"
 
         os.system("python3 " + setup_map_path + " " + file_path)
-        print("map switched to", file_name)
-        os.system("gnome-terminal -e \"bash " + setup_path + "\"")
+        print("map switched to", road_name)
+
+        os.system(setup_path + " &")
         print("setup success")
 
         self.road_window = Road()
         self.road_window.show()
-        self.road_window.render_road(self.folder_path, file_name, section_name)
-
-        os.system("bash " + start_path)
-        print("robot launch with success")
+        self.road_window.render_road(self.folder_path, road_name)
         
     def show_map_elements(self, cb):
         self.map_canvas.show_element(cb.text(), cb.isChecked())

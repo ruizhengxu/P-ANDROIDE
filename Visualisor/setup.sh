@@ -10,22 +10,25 @@ export AUTO_EX_CALIB=action
 export AUTO_DT_CALIB=action
 
 function trap_ctrlc(){
-    killall -9 gzclient
-    killall -9 gzserver
-    pkill -f Pos.py
-    pkill -f MainWindow.py
-    rm -f data.json
-    exit 2
+    ./quit.sh
 }
 
 trap "trap_ctrlc" 2
 
-sleep 3
-gnome-terminal -e "roslaunch turtlebot3_gazebo turtlebot3_autorace.launch"
-sleep 3
-gnome-terminal -e "roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch"
-sleep 3
-gnome-terminal -e "roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch"
+python3 RoadMap_Visualisor/Pos.py > /dev/null 2>&1 &
 
-cat
-trap_ctrlc
+if  [[ $1 = "-d" ]]; then
+    sleep 3
+    gnome-terminal -e "roslaunch turtlebot3_gazebo turtlebot3_autorace.launch"
+    sleep 3
+    gnome-terminal -e "roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch"
+    sleep 3
+    gnome-terminal -e "roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch"
+else
+    sleep 3
+    roslaunch turtlebot3_gazebo turtlebot3_autorace.launch > /dev/null 2>&1
+    sleep 3
+    roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch > /dev/null 2>&1
+    sleep 3
+    roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch > /dev/null 2>&1
+fi

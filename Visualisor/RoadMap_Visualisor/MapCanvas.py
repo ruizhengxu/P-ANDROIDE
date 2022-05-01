@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from MainWindow import *
+from ConfigWindow import *
 
 INTERSECTION_WIDTH = 20
 INTEREST_PT_WIDTH = 3
@@ -74,9 +75,13 @@ class MapCanvas(QWidget):
     
     def mousePressEvent(self, event):
         self.selected_section = self.get_pointed_element(event.pos(), only_section=True)
+
         if self.selected_section != "":
-            self.parent().show_road(self.selected_section)
-        self.update()
+            road_name, road_data = self.parent().get_road_data(self.selected_section)
+            self.config_window = ConfigWindow(road_name, road_data, self.parent())
+            self.config_window.show()
+            self.update()
+
         
     def mouseMoveEvent(self, event):
         self.parent().setMessage(self.get_pointed_element(event.pos()))
