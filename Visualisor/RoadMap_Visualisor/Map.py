@@ -92,6 +92,7 @@ class Map(QWidget):
         path = os.path.abspath(__file__)
         path = str(Path(path).parent)
         setup_map_path = path + "/../map/setup_map.py"
+        setup_pose_path = path + "/../pose/setup_pose.py"
         file_path = path + "/data/" + road_name
         setup_path = path + "/../setup.sh"
 
@@ -102,6 +103,9 @@ class Map(QWidget):
 
         os.system("python3 " + setup_map_path + " " + file_path)
         print("map switched to", road_name)
+
+        os.system("python3 " + setup_pose_path + " " + file_path)
+        print("position initialized")
 
         os.system(setup_path + " &")
         print("setup success")
