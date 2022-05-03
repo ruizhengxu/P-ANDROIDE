@@ -1,4 +1,4 @@
-import Utils, os, time
+import Utils, os, time, sys
 from pathlib import Path
 from functools import partial
 from PyQt5.QtWidgets import *
@@ -110,7 +110,7 @@ class Map(QWidget):
         os.system(setup_path + " &")
         print("setup success")
 
-        self.road_window = Road()
+        self.road_window = Road(road_name)
         self.road_window.show()
         self.road_window.render_road(self.folder_path, road_name)
         

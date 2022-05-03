@@ -7,7 +7,6 @@ class ConfigWindow(QWidget):
         super(QWidget, self).__init__(parent)
         self.setAttribute(Qt.WA_QuitOnClose, False)
 
-        print(MAP, type(MAP))
         self.MAP = MAP
         self.road_name = road_name
         self.road_data = road_data

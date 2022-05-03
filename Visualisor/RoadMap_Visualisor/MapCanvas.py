@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from MainWindow import *
-from ConfigWindow import *
 
 INTERSECTION_WIDTH = 20
 INTEREST_PT_WIDTH = 3
@@ -78,8 +77,7 @@ class MapCanvas(QWidget):
 
         if self.selected_section != "":
             road_name, road_data = self.parent().get_road_data(self.selected_section)
-            self.config_window = ConfigWindow(road_name, road_data, self.parent())
-            self.config_window.show()
+            self.parent().show_road(road_name)
             self.update()
 
         

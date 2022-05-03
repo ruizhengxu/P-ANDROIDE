@@ -11,7 +11,7 @@ HEIGHT = 720
 OFFSET = 30
 
 class Road(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, road_name, parent=None):
         super(QWidget, self).__init__(parent)
         self.setAttribute(Qt.WA_QuitOnClose, False)
 
@@ -21,28 +21,38 @@ class Road(QWidget):
                          int(screen.size().height()/2)-int(HEIGHT/2)+OFFSET, 
                          WIDTH, HEIGHT)
         
+        self.path = os.path.abspath(__file__)
+        self.path = str(Path(self.path).parent)
         self.road = None
-        self.road_name = QLabel("")
+        self.road_name = road_name
+        self.road_label = QLabel("")
         
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
         self.bottom_layout = QHBoxLayout()
         self.bottom_layout.setContentsMargins(0, 0, 0, 0)
+        self.btn_layout = QVBoxLayout()
         self.top_layout = QVBoxLayout()
         self.top_layout.setContentsMargins(10, 5, 10, 5)
         
         self.init_road_canvas()
         self.init_road_properties()
+        
+        self.stop_btn = QPushButton("Stop Simulation")
+        self.stop_btn.clicked.connect(self.stop_simulation)
+        self.stop_btn.setDisabled(True)
         self.simulate_btn = QPushButton("Simulate")
         self.simulate_btn.clicked.connect(self.simulate)
+        self.btn_layout.addWidget(self.stop_btn)
+        self.btn_layout.addWidget(self.simulate_btn)
 
         self.statusbar = QStatusBar()
         self.statusbar.showMessage("Ready")
 
-        self.bottom_layout.addWidget(self.road_properties, stretch=85)
-        self.bottom_layout.addWidget(self.simulate_btn, stretch=15)
+        self.bottom_layout.addLayout(self.params_layout, stretch=80)
+        self.bottom_layout.addLayout(self.btn_layout, stretch=20)
         
-        self.top_layout.addWidget(self.road_name, stretch=1, alignment=Qt.AlignCenter)
+        self.top_layout.addWidget(self.road_label, stretch=1, alignment=Qt.AlignCenter)
         self.top_layout.addWidget(self.road_canvas, stretch=85)
         self.top_layout.addLayout(self.bottom_layout, stretch=14)
         self._layout.addLayout(self.top_layout)
@@ -54,52 +64,91 @@ class Road(QWidget):
         self.road_canvas = RoadCanvas(self)
         
     def init_road_properties(self):
-        self.road_properties = QTabWidget()
+        # speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
+        speed_path = "control_lane"
+        with open(speed_path) as f:
+            for line in f:
+                line = line.rstrip()
+                if line.startswith("MIN_LIN"): self.minSpeed = line.split("=")[1].strip()
+                if line.startswith("MAX_LIN"): self.maxSpeed = line.split("=")[1].strip()
         
-        self.road_properties.setSizePolicy(QSizePolicy.Preferred,
-                QSizePolicy.Ignored)
-        
-        tab1 = QWidget()
-        tableWidget = QTableWidget(10, 10)
+        self.params_layout = QGridLayout()
+        self.minSpd_input = QLineEdit()
+        self.minSpd_input.setText(self.minSpeed)
+        self.maxSpd_input = QLineEdit()
+        self.maxSpd_input.setText(self.maxSpeed)
 
-        tab1hbox = QHBoxLayout()
-        tab1hbox.setContentsMargins(5, 5, 5, 5)
-        tab1hbox.addWidget(tableWidget)
-        tab1.setLayout(tab1hbox)
-
-        tab2 = QWidget()
-        textEdit = QTextEdit()
-
-        textEdit.setPlainText("Twinkle, twinkle, little star,\n"
-                              "How I wonder what you are.\n" 
-                              "Up above the world so high,\n"
-                              "Like a diamond in the sky.\n"
-                              "Twinkle, twinkle, little star,\n" 
-                              "How I wonder what you are!\n")
-
-        tab2hbox = QHBoxLayout()
-        tab2hbox.setContentsMargins(5, 5, 5, 5)
-        tab2hbox.addWidget(textEdit)
-        tab2.setLayout(tab2hbox)
-
-        self.road_properties.addTab(tab1, "&Table")
-        self.road_properties.addTab(tab2, "Text &Edit")
+        self.params_layout.addWidget(QLabel("Simulation parameters"), 0, 0, 1, 2)
+        self.params_layout.addWidget(QLabel("Min Speed"), 1, 0)
+        self.params_layout.addWidget(self.minSpd_input, 1, 1)
+        self.params_layout.addWidget(QLabel("Max Speed"), 2, 0)
+        self.params_layout.addWidget(self.maxSpd_input, 2, 1)
         
     def render_road(self, folder_path, file_name):
         section_data = self.load_road(folder_path+file_name)
-        self.road_name.setText(file_name)
+        self.road_label.setText(file_name)
 
         self.road_canvas.render(section_data)
     
     def load_road(self, file_name):
         return Utils.read_json(file_name)
     
+    def stop_simulation(self):
+        self.stop_btn.setDisabled(True)
+        self.simulate_btn.setDisabled(False)
+        quit_path = self.path + "/../quit.sh"
+        os.system("bash " + quit_path + " &")
+        print("Stop simulation")
+    
     def simulate(self):
-        path = os.path.abspath(__file__)
-        path = str(Path(path).parent)
-        start_path = path + "/../start.sh"
-        os.system("bash " + start_path + " &")
-        print("robot launch with success")
+        if self.checkParams():
+            start_path = self.path + "/../start.sh"
+            os.system("bash " + start_path + " &")
+            self.simulate_btn.setDisabled(True)
+            self.stop_btn.setDisabled(False)
+            print("robot launch with success")
+            
+    def checkParams(self):
+        error = False
+        error_text = ""
+        
+        try:
+            minSpeed = float(self.minSpd_input.text())
+            maxSpeed = float(self.maxSpd_input.text())
+            
+            if minSpeed < 0 or maxSpeed < 0:
+                error = True
+                error_text += "Speeds should not be lower than 0 !\n"
+            if minSpeed > maxSpeed:
+                error = True
+                error_text += "Minimun speed should be lower than maximum speed !\n"
+        except Exception as e:
+            error = True
+            error_text = "Speed should be a decimal or integer number !\n"   
+        
+        if error:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle("Error in parameters")
+            msg.setText("Please verify your parameters")
+            msg.setInformativeText(error_text)
+            retval = msg.exec_()
+            return False
+        
+        # Edit file when no error
+        speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
+        # speed_path = "control_lane"
+        with open(speed_path, "r") as f:
+            f_data = f.read()
+        f_data = f_data.replace("MIN_LIN = " + self.minSpeed, "MIN_LIN = " + str(minSpeed))
+        f_data = f_data.replace("MAX_LIN = " + self.maxSpeed, "MAX_LIN = " + str(maxSpeed))
+        with open(speed_path, "w") as f:
+            f.write(f_data)
+            
+        self.minSpeed = str(minSpeed)
+        self.maxSpeed = str(maxSpeed)
+        
+        return True
 
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)
