@@ -24,8 +24,8 @@ import numpy as np
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Twist
 
-MIN_LIN = 0 #0
-MAX_LIN = 0.2 #0.2
+MIN_LIN = 0.0
+MAX_LIN = 0.2
 
 class ControlLane():
     def __init__(self):

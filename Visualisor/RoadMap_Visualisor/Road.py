@@ -64,8 +64,7 @@ class Road(QWidget):
         self.road_canvas = RoadCanvas(self)
         
     def init_road_properties(self):
-        # speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
-        speed_path = "control_lane"
+        speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
         with open(speed_path) as f:
             for line in f:
                 line = line.rstrip()
