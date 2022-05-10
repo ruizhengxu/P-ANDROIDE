@@ -4,7 +4,9 @@ from PyQt5.QtCore import *
 from MainWindow import WIDTH, HEIGHT
 
 ROAD_WIDTH = 3
-ROAD_SIZE = 4
+ROAD_SIZE = 6
+
+INIT_SIZE = 1535
 
 import json
 import threading
@@ -20,7 +22,9 @@ class RoadCanvas(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet("background-color: black")
         self.setMouseTracking(True)
-
+        #self.setSize(1535,1535)
+        #self.setFixedHeight(1535)
+        
         self.init_obj()
 
         self.data = None
@@ -44,28 +48,29 @@ class RoadCanvas(QWidget):
                 pass
     
     def paintEvent(self, event):
+        self.setFixedWidth(self.height())
         painter = QPainter(self)
         painter.translate(self.offset+self.current_offset)
         painter.scale(self.scale, self.scale)
         path = QPainterPath()
         
         if len(self.list_curves) != 0:
-            path.moveTo(QPointF(self.white_pts[0]["x"], self.white_pts[0]["y"]))
+            path.moveTo(QPointF(self.white_pts[0]["x"]*(self.width()/INIT_SIZE), self.white_pts[0]["y"]*(self.height()/INIT_SIZE)))
             for i in range(0, len(self.white_pts), 2):
                 # Draw white points
                 painter.setPen(QPen(Qt.white, ROAD_WIDTH))
-                pt1 = QPointF(self.white_pts[i]["x"], self.white_pts[i]["y"])
-                pt2 = QPointF(self.white_pts[i+1]["x"], self.white_pts[i+1]["y"])
+                pt1 = QPointF(self.white_pts[i]["x"]*(self.width()/INIT_SIZE), self.white_pts[i]["y"]*(self.height()/INIT_SIZE))
+                pt2 = QPointF(self.white_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.white_pts[i+1]["y"]*(self.height()/INIT_SIZE))
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
             path.clear()
             
-            path.moveTo(QPointF(self.yellow_pts[0]["x"], self.yellow_pts[0]["y"]))
+            path.moveTo(QPointF(self.yellow_pts[0]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[0]["y"]*(self.height()/INIT_SIZE)))
             for i in range(0, len(self.yellow_pts), 2):
                 # Draw yellow points
                 painter.setPen(QPen(Qt.yellow, ROAD_WIDTH))
-                pt1 = QPointF(self.yellow_pts[i]["x"], self.yellow_pts[i]["y"])
-                pt2 = QPointF(self.yellow_pts[i+1]["x"], self.yellow_pts[i+1]["y"])
+                pt1 = QPointF(self.yellow_pts[i]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[i]["y"]*(self.height()/INIT_SIZE))
+                pt2 = QPointF(self.yellow_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[i+1]["y"]*(self.height()/INIT_SIZE))
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
             path.clear()
@@ -75,7 +80,11 @@ class RoadCanvas(QWidget):
         #painter.setBrush(Qt.yellow)
         if self.data != None:
             # print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
-            painter.drawEllipse(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ((ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)), 5, 5)
+            painter.drawEllipse(
+                QPoint(
+                    ((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(self.width()/ROAD_SIZE),
+                    ((ROAD_SIZE/2) - self.data["pose"]["position"]["y"])*(self.height()/ROAD_SIZE))
+                , 5, 5)
 
         #self.update()
         

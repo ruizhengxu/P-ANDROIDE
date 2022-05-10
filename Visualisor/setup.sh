@@ -15,20 +15,19 @@ function trap_ctrlc(){
 
 trap "trap_ctrlc" 2
 
-python3 RoadMap_Visualisor/Pos.py > /dev/null 2>&1 &
-
 if  [[ $1 = "-d" ]]; then
-    sleep 3
+    sleep 1
     gnome-terminal -e "roslaunch turtlebot3_gazebo turtlebot3_autorace.launch"
-    sleep 3
+    sleep 1
     gnome-terminal -e "roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch"
-    sleep 3
+    sleep 1
     gnome-terminal -e "roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch"
 else
-    sleep 3
-    roslaunch turtlebot3_gazebo turtlebot3_autorace.launch > /dev/null 2>&1
-    sleep 3
-    roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch > /dev/null 2>&1
-    sleep 3
-    roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch > /dev/null 2>&1
+    sleep 1
+    roslaunch turtlebot3_gazebo turtlebot3_autorace.launch > /dev/null 2>&1 &
+    sleep 1
+    roslaunch turtlebot3_autorace_camera turtlebot3_autorace_intrinsic_camera_calibration.launch > /dev/null 2>&1 &
+    sleep 1
+    roslaunch turtlebot3_autorace_core turtlebot3_autorace_core.launch > /dev/null 2>&1 &
 fi
+python3 RoadMap_Visualisor/Pos.py > /dev/null 2>&1 &
