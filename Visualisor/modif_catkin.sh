@@ -15,3 +15,6 @@ cp .stuff/turtlebot3_autorace.launch catkin_ws/src/turtlebot3_simulations/turtle
 # Robot speeding rules
 rm catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 cp .stuff/control_lane catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
+
+# make control lane executable
+chmod 777 catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
