@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from RoadCanvas import *
 
 SIZE = 1535
-WIDTH = 1280
+WIDTH = 580
 HEIGHT = 720
 OFFSET = 30
 
