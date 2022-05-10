@@ -24,13 +24,14 @@ class RoadCanvas(QWidget):
         self.init_obj()
 
         self.data = None
+        self.trajectories = []
         self.ev1 = threading.Event()
         self.ev1.set()
 
         self.T = threading.Thread(target=self.get_data_from_file)
         self.T.start()
     
-    def get_data_from_file(self) -> None:
+    def get_data_from_file(self):
 
         while True:
             if not self.ev1.wait(0): break 
@@ -73,9 +74,18 @@ class RoadCanvas(QWidget):
         #print(self.data)
         #painter.setPen(Qt.yellow)
         #painter.setBrush(Qt.yellow)
+        if len(self.trajectories) > 0:
+            painter.setPen(QPen(QColor("EA6E19")))
+            for trajectory in self.trajectories:
+                painter.drawEllipse(QPoint(trajectory[0], trajectory[1], 1, 1))
+        
         if self.data != None:
             # print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
-            painter.drawEllipse(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ((ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)), 5, 5)
+            painter.setPen(QPen(Qt.red))
+            x = ((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE)
+            y = ((ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)
+            painter.drawEllipse(QPoint(x, y, 5, 5))
+            self.trajectories.append([x, y])
 
         #self.update()
         

@@ -89,27 +89,6 @@ class Map(QWidget):
         return file_name, Utils.read_json(self.folder_path+file_name)
         
     def show_road(self, road_name):
-        path = os.path.abspath(__file__)
-        path = str(Path(path).parent)
-        setup_map_path = path + "/../map/setup_map.py"
-        setup_pose_path = path + "/../pose/setup_pose.py"
-        file_path = path + "/data/" + road_name
-        setup_path = path + "/../setup.sh"
-
-        # Handle debug mod
-        if len(sys.argv) > 1:
-            if sys.argv[1] == "-d":
-                setup_path += " -d"
-
-        os.system("python3 " + setup_map_path + " " + file_path)
-        print("map switched to", road_name)
-
-        os.system("python3 " + setup_pose_path + " " + file_path)
-        print("position initialized")
-
-        os.system(setup_path + " &")
-        print("setup success")
-
         self.road_window = Road(road_name)
         self.road_window.show()
         self.road_window.render_road(self.folder_path, road_name)

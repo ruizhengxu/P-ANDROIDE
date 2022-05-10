@@ -1,4 +1,4 @@
-import Utils, os
+import Utils, os, sys
 from pathlib import Path
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -95,13 +95,39 @@ class Road(QWidget):
     def stop_simulation(self):
         self.stop_btn.setDisabled(True)
         self.simulate_btn.setDisabled(False)
+        
+        Utils.save_data_as_json(self.road_canvas.trajectories, self.road_name)
+        
         quit_path = self.path + "/../quit.sh"
         os.system("bash " + quit_path + " &")
         print("Stop simulation")
     
     def simulate(self):
         if self.checkParams():
+            path = os.path.abspath(__file__)
+            path = str(Path(path).parent)
+            setup_map_path = path + "/../map/setup_map.py"
+            setup_pose_path = path + "/../pose/setup_pose.py"
+            file_path = path + "/data/" + self.road_name
+            setup_path = path + "/../setup.sh"
             start_path = self.path + "/../start.sh"
+
+            # Handle debug mod
+            if len(sys.argv) > 1:
+                if sys.argv[1] == "-d":
+                    setup_path += " -d"
+
+            os.system("python3 " + setup_map_path + " " + file_path)
+            print("map switched to", self.road_name)
+
+            os.system("python3 " + setup_pose_path + " " + file_path)
+            print("position initialized")
+
+            os.system(setup_path + " &")
+            print("setup success")
+            
+            time.sleep(5) # Wait for 5 seconds before launch autorace
+            
             os.system("bash " + start_path + " &")
             self.simulate_btn.setDisabled(True)
             self.stop_btn.setDisabled(False)
