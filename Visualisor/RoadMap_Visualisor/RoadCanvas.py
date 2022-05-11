@@ -16,7 +16,7 @@ import os
 
 class RoadCanvas(QWidget):
     
-    def __init__(self, parent):
+    def __init__(self, parent, histories):
         QWidget.__init__(self, parent)
 
         self.setAttribute(Qt.WA_StyledBackground, True)
@@ -28,6 +28,7 @@ class RoadCanvas(QWidget):
         self.init_obj()
 
         self.data = None
+        self.histories = histories
         self.trajectories = []
         self.ev1 = threading.Event()
         self.ev1.set()
@@ -76,21 +77,57 @@ class RoadCanvas(QWidget):
             painter.drawPath(path)
             path.clear()
         
-        #print(self.data)
-        #painter.setPen(Qt.yellow)
-        #painter.setBrush(Qt.yellow)
+        # draw last 5 histories' trajectory
+        if len(self.histories) > 0:
+            i = 0
+            for history in self.histories:
+                c = QColor(Qt.darkgreen)
+                c.setAlpha(80)
+                painter.setPen(QPen(c))
+                traj = history["trajectory"]
+                for pt in traj:
+                    painter.drawEllipse(QPointF(pt[0], pt[1]), 1, 1)
+                if i == 5: break
+                    
+
         if len(self.trajectories) > 0:
-            painter.setPen(QPen(QColor("EA6E19")))
+            c = QColor(Qt.cyan)
+            c.setAlpha(80)
+            painter.setPen(QPen(c))
             for trajectory in self.trajectories:
-                painter.drawEllipse(QPoint(trajectory[0], trajectory[1], 1, 1))
+                painter.drawEllipse(QPointF(trajectory[0], trajectory[1]), 1, 1)
         
         if self.data != None:
             # print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
             painter.setPen(QPen(Qt.red))
             x = ((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(self.width()/ROAD_SIZE)
-            y = ((ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(self.height()/ROAD_SIZE)
-            painter.drawEllipse(QPoint(x, y, 5, 5))
+            y = ((ROAD_SIZE/2) - self.data["pose"]["position"]["y"])*(self.height()/ROAD_SIZE)
+            painter.drawEllipse(QPointF(x, y), 5, 5)
+
             self.trajectories.append([x, y])
+            if (len(self.trajectories) > 0 and self.trajectories[len(self.trajectories)-1][0] != x and self.trajectories[len(self.trajectories)-1][1] != y):
+                self.trajectories.remove(len(self.trajectories)-1)
+            if (len(self.trajectories)>2):
+                # draw orientation
+                painter.setPen(QPen(Qt.red, 2))
+                s_pt = self.trajectories[len(self.trajectories)-1]
+                e_pt = [(s_pt[0] - self.trajectories[len(self.trajectories)-2][0])*20 + s_pt[0], 
+                (s_pt[1] - self.trajectories[len(self.trajectories)-2][1])*20 + s_pt[1]]
+                s_pt = QPointF(s_pt[0], s_pt[1])
+                e_pt = QPointF(e_pt[0], e_pt[1])
+                # draw line of arrow
+                arrow = QPainterPath(s_pt)
+                arrow.lineTo(e_pt)
+                painter.drawPath(arrow)
+                # draw arrow head
+                dx, dy = s_pt.x()-e_pt.x(), s_pt.y()-e_pt.y()
+                length = np.sqrt(dx**2 + dy**2)
+                normX, normY = dx/length, dy/length
+                perpX, perpY = -normY, normX
+                left_pt = QPointF(e_pt.x() + 3*normX + 3*perpX, e_pt.y() + 3*normY + 3*perpY)
+                right_pt = QPointF(e_pt.x() + 3*normX - 3*perpX, e_pt.y() + 3*normY - 3*perpY)
+                painter.drawPolyline(QPolygonF([left_pt, e_pt, right_pt]))
+
         
         #self.update()
         

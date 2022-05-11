@@ -1,5 +1,6 @@
-import json
+import json, os
 from datetime import datetime
+from pathlib import Path
 
 def read_json(file):
     # Read file
@@ -13,5 +14,10 @@ def read_json(file):
 
 def save_data_as_json(data, name):
     now = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    with open(name+now+".json", 'w') as f:
+    path = os.path.abspath(__file__)
+    path = str(Path(path).parent)
+    path += "/histories/" + name.split(".")[0]
+    file_name = "_"+now+".json"
+
+    with open(path+file_name, 'w+') as f:
         json.dump(data, f)

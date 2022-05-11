@@ -17,4 +17,8 @@ rm catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_l
 cp .stuff/control_lane catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 
 # make control lane executable
+chmod 777 visualisor.app
+chmod 777 setup.sh
+chmod 777 start.sh
+chmod 777 quit.sh
 chmod 777 catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane

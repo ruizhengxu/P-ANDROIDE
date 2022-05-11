@@ -61,7 +61,15 @@ class Road(QWidget):
         self.setLayout(self._layout)
         
     def init_road_canvas(self):
-        self.road_canvas = RoadCanvas(self)
+        histories = []
+        curve_name = self.road_name.split(".")[0]
+        his_path = self.path + "/histories/"
+        all_curves_files = [f for f in os.listdir(his_path) if os.path.isfile(os.path.join(his_path, f)) and f.startswith(curve_name)]
+        for curve_file in all_curves_files:
+            data = Utils.read_json(his_path+curve_file)
+            histories.append(data)
+
+        self.road_canvas = RoadCanvas(self, histories)
         
     def init_road_properties(self):
         speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
@@ -96,7 +104,10 @@ class Road(QWidget):
         self.stop_btn.setDisabled(True)
         self.simulate_btn.setDisabled(False)
         
-        Utils.save_data_as_json(self.road_canvas.trajectories, self.road_name)
+        if len(self.road_canvas.trajectories) > 5:
+            history = {"MIN_LIN": self.minSpeed, "MAX_LIN": self.maxSpeed,
+            "trajectory": self.road_canvas.trajectories}
+            Utils.save_data_as_json(history, self.road_name)
         
         quit_path = self.path + "/../quit.sh"
         os.system("bash " + quit_path + " &")
