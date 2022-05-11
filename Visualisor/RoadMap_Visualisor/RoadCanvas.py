@@ -86,7 +86,8 @@ class RoadCanvas(QWidget):
                 painter.setPen(QPen(c))
                 traj = history["trajectory"]
                 for pt in traj:
-                    painter.drawEllipse(QPointF(pt[0], pt[1]), 1, 1)
+                    print(pt)
+                    painter.drawEllipse(QPointF((ROAD_SIZE/2) + pt[0]*(self.width()/ROAD_SIZE), (ROAD_SIZE/2) - pt[1]*(self.height()/ROAD_SIZE)), 1, 1)
                 if i == 5: break
                     
 
@@ -95,14 +96,16 @@ class RoadCanvas(QWidget):
             c.setAlpha(80)
             painter.setPen(QPen(c))
             for trajectory in self.trajectories:
-                painter.drawEllipse(QPointF(trajectory[0], trajectory[1]), 1, 1)
+                painter.drawEllipse(QPointF(((ROAD_SIZE/2) + trajectory[0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - trajectory[1])*(self.height()/ROAD_SIZE)), 1, 1)
         
         if self.data != None:
             # print(QPoint(((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(WIDTH/ROAD_SIZE), ( (ROAD_SIZE/2) + self.data["pose"]["position"]["y"])*(HEIGHT/ROAD_SIZE)))
             painter.setPen(QPen(Qt.red))
-            x = ((ROAD_SIZE/2) + self.data["pose"]["position"]["x"])*(self.width()/ROAD_SIZE)
-            y = ((ROAD_SIZE/2) - self.data["pose"]["position"]["y"])*(self.height()/ROAD_SIZE)
-            painter.drawEllipse(QPointF(x, y), 5, 5)
+            x = self.data["pose"]["position"]["x"]
+            y = self.data["pose"]["position"]["y"]
+            xx = ((ROAD_SIZE/2) + x)*(self.width()/ROAD_SIZE)
+            yy = ((ROAD_SIZE/2) - y)*(self.height()/ROAD_SIZE)
+            painter.drawEllipse(QPointF(xx, yy), 5, 5)
 
             self.trajectories.append([x, y])
             if (len(self.trajectories) > 0 and self.trajectories[len(self.trajectories)-1][0] != x and self.trajectories[len(self.trajectories)-1][1] != y):
