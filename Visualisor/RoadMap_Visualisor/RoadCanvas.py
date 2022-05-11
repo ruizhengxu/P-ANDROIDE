@@ -81,7 +81,7 @@ class RoadCanvas(QWidget):
         if len(self.histories) > 0:
             i = 0
             for history in self.histories:
-                c = QColor(Qt.darkgreen)
+                c = QColor(Qt.darkGreen)
                 c.setAlpha(80)
                 painter.setPen(QPen(c))
                 traj = history["trajectory"]
