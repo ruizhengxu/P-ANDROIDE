@@ -90,26 +90,6 @@ class RoadCanvas(QWidget):
                 for pt in traj:
                     # print(pt)
                     painter.drawEllipse(QPointF(((ROAD_SIZE/2) + pt[0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - pt[1])*(self.height()/ROAD_SIZE)), 1, 1)
-                # for i in range(1, len(traj)-1, 20):
-                #     painter.setPen(QPen(Qt.red, 2))
-                #     s_pt = [((ROAD_SIZE/2) + traj[i][0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - traj[i][1])*(self.width()/ROAD_SIZE)]
-                #     e_pt = [(s_pt[0] - ((ROAD_SIZE/2) + traj[i-1][0])*(self.width()/ROAD_SIZE))*20 + s_pt[0], 
-                #     (s_pt[1] - ((ROAD_SIZE/2) - traj[i-1][1])*(self.width()/ROAD_SIZE))*20 + s_pt[1]]
-                #     s_pt = QPointF(s_pt[0], s_pt[1])
-                #     e_pt = QPointF(e_pt[0], e_pt[1])
-                #     # draw line of arrow
-                #     arrow = QPainterPath(s_pt)
-                #     arrow.lineTo(e_pt)
-                #     painter.drawPath(arrow)
-                #     # draw arrow head
-                #     dx, dy = s_pt.x()-e_pt.x(), s_pt.y()-e_pt.y()
-                #     length = np.sqrt(dx**2 + dy**2)
-                #     normX, normY = dx/length, dy/length
-                #     perpX, perpY = -normY, normX
-                #     left_pt = QPointF(e_pt.x() + 3*normX + 3*perpX, e_pt.y() + 3*normY + 3*perpY)
-                #     right_pt = QPointF(e_pt.x() + 3*normX - 3*perpX, e_pt.y() + 3*normY - 3*perpY)
-                #     painter.drawPolyline(QPolygonF([left_pt, e_pt, right_pt]))
-                # if i == 5: break
                     
 
         ############################################
@@ -144,9 +124,6 @@ class RoadCanvas(QWidget):
                         ((ROAD_SIZE/2) - self.trajectories[len(self.trajectories)-1][1])*(self.width()/ROAD_SIZE)]
                 e_pt = [(s_pt[0] - ((ROAD_SIZE/2) + self.trajectories[len(self.trajectories)-2][0])*(self.width()/ROAD_SIZE))*20 + s_pt[0], 
                         (s_pt[1] - ((ROAD_SIZE/2) - self.trajectories[len(self.trajectories)-2][1])*(self.width()/ROAD_SIZE))*20 + s_pt[1]]
-                # s_pt = self.trajectories[len(self.trajectories)-1]
-                # e_pt = [(s_pt[0] - self.trajectories[len(self.trajectories)-2][0])*20 + s_pt[0], 
-                #         (s_pt[1] - self.trajectories[len(self.trajectories)-2][1])*20 + s_pt[1]]
                 s_pt = QPointF(s_pt[0], s_pt[1])
                 e_pt = QPointF(e_pt[0], e_pt[1])
                 # draw line of arrow
