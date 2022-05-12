@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 from MainWindow import WIDTH, HEIGHT
 
 ROAD_WIDTH = 3
@@ -35,6 +36,7 @@ class RoadCanvas(QWidget):
 
         self.T = threading.Thread(target=self.get_data_from_file)
         self.T.start()
+        
     
     def get_data_from_file(self):
 
@@ -50,7 +52,9 @@ class RoadCanvas(QWidget):
                 pass
     
     def paintEvent(self, event):
-        self.setFixedWidth(self.height())
+        
+        
+        
         painter = QPainter(self)
         painter.translate(self.offset+self.current_offset)
         painter.scale(self.scale, self.scale)
@@ -166,6 +170,11 @@ class RoadCanvas(QWidget):
         elif angle > 0:
             self.scale += 0.01
         self.update()
+
+    def moveEvent(self, event):
+        self.setFixedWidth(self.height())
+        if self.parent().width() > self.height():
+            self.move(int((self.parent().width() - self.height())/2), self.pos().y())
         
     def init_obj(self):
         self.move_canvas = False
