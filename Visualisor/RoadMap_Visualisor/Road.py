@@ -121,7 +121,7 @@ class Road(QWidget):
         
         self.road_canvas.trajectories = []
         quit_path = self.path + "/../quit.sh"
-        os.system("bash " + quit_path + " &")
+        os.system("bash " + quit_path)
         print("Stop simulation and save trajectory")
 
     def auto_simulate(self):
@@ -136,10 +136,11 @@ class Road(QWidget):
             Utils.save_opt_as_json(data, self.road_name)
         else:
             if first:
-                self.minThreshold = 0.0
-                self.maxThreshold = 10.0
-                minSpeed = self.minThreshold
-                maxSpeed = self.maxThreshold
+                if(self.checkParams()):
+                    minSpeed = float(self.minSpeed)
+                    maxSpeed = float(self.maxSpeed)
+                    self.minThreshold = minSpeed
+                    self.minThreshold = maxSpeed
             else:
                 minSpeed = float(self.minSpeed)
                 maxSpeed = float(self.maxSpeed)

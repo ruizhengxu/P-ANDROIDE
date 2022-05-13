@@ -16,8 +16,6 @@ cp .stuff/turtlebot3_autorace.launch catkin_ws/src/turtlebot3_simulations/turtle
 rm catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 cp .stuff/control_lane catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 
-# changing image_compensation to quit when simulation is over
-cp -f .stuff/image_compensation catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_camera/nodes/image_compensation
 # make control lane executable
 chmod 777 visualisor.app
 chmod 777 setup.sh

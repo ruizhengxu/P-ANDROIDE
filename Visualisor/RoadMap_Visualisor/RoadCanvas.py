@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from MainWindow import WIDTH, HEIGHT
+from numpy.linalg import norm
 
 ROAD_WIDTH = 3
 ROAD_SIZE = 6
@@ -51,8 +52,9 @@ class RoadCanvas(QWidget):
                     print("finish")
                     success = self.isCloseToLastPoint(self.trajectories[-1])
                     self.parent().stop_simulation()
+                    self.started = False
                     print("success :", success, "\n")
-                    time.sleep(5)
+                    # time.sleep(5)
                     self.parent().dichotomy_search(False, success=success)
                 self.update()
             except:
@@ -151,7 +153,7 @@ class RoadCanvas(QWidget):
                 right_pt = QPointF(e_pt.x() + 3*normX - 3*perpX, e_pt.y() + 3*normY - 3*perpY)
                 painter.drawPolyline(QPolygonF([left_pt, e_pt, right_pt]))
 
-        # #self.update()
+        # self.update()
         
     def mousePressEvent(self, event):
         self.move_canvas = event.button() == Qt.RightButton
@@ -192,6 +194,8 @@ class RoadCanvas(QWidget):
         self.list_curves = []
         self.white_pts = []
         self.yellow_pts = []
+        self.box = QPolygonF()
+        self.started = False
         
     def render(self, section_data):
         self.list_curves = section_data["list_man"]
@@ -202,21 +206,42 @@ class RoadCanvas(QWidget):
             self.yellow_pts += curve["yellow"]
         self.last_pt = [((self.white_pts[-1]["x"] + self.yellow_pts[-1]["x"])/2) * (self.width()/INIT_SIZE), 
                         ((self.white_pts[-1]["y"] + self.yellow_pts[-1]["y"])/2) * (self.height()/INIT_SIZE)]
-        
+        for pt in self.white_pts:
+            x = ((pt["x"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
+            y = -((pt["y"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
+            self.box.append(QPointF(x,y))
+        for pt in reversed(self.yellow_pts):
+            x = ((pt["x"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
+            y = -((pt["y"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
+            self.box.append(QPointF(x,y))
+
+        print("render")
     """
-    Veirfy if robot finish the circuit
+    Verify if robot finish the circuit
     """
     def isFinish(self):
-        threshold = 50
-        if len(self.trajectories) > threshold:
-            res = True
-            lastPos = self.trajectories[-1]
-            for traj in self.trajectories[len(self.trajectories)-(threshold+1):len(self.trajectories)-1]:
-                if lastPos != traj:
-                    res = False
-            return res
-        else:
-            return False
+        # threshold = 400
+        # if len(self.trajectories) > threshold:
+        #     res = True
+        #     lastPos = self.trajectories[-1]
+        #     for traj in self.trajectories[len(self.trajectories)-(threshold+1):len(self.trajectories)-1]:
+        #         if lastPos != traj:
+        #             res = False
+        #     return res
+        # else:
+        #     return False
+
+        if(not(self.started)):
+            if(len(self.trajectories) > 20):
+                self.started = (norm(np.array(self.trajectories[-1]) - np.array(self.trajectories[-2])) > 0.00005)
+
+        res = False
+
+        if(self.started):
+            pt = self.trajectories[-1]
+            pt = QPointF(pt[0],pt[1])
+            res = not(self.box.containsPoint(pt,Qt.WindingFill))
+        return res
 
     def isCloseToLastPoint(self, currentPos):
         threshold = 25
