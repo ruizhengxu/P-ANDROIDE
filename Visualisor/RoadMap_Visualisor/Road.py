@@ -131,26 +131,32 @@ class Road(QWidget):
     def dichotomy_search(self, first, success):
 
         # print(first, success)
-        if np.abs(float(self.minSpeed)-self.optSpeed) <= 0.01:
-            data = {"name": self.road_name, "optimal_speed": self.minSpeed}
-            Utils.save_opt_as_json(data, self.road_name)
-        else:
-            if first:
-                if(self.checkParams()):
-                    minSpeed = float(self.minSpeed)
-                    maxSpeed = float(self.maxSpeed)
-                    self.minThreshold = minSpeed
-                    self.minThreshold = maxSpeed
-            else:
+        stop = False
+        
+        if first:
+            if(self.checkParams()):
                 minSpeed = float(self.minSpeed)
                 maxSpeed = float(self.maxSpeed)
-                if success:
+                self.minThreshold = minSpeed
+                self.maxThreshold = maxSpeed
+        else:
+            minSpeed = float(self.minSpeed)
+            maxSpeed = float(self.maxSpeed)
+            if success:
+                if np.abs(minSpeed-self.optSpeed) <= 0.01:
+                    data = {"name": self.road_name, "optimal_speed": self.optSpeed}
+                    Utils.save_opt_as_json(data, self.road_name)
+                    stop = True
+                else:
                     self.minThreshold = minSpeed
                     self.optSpeed = minSpeed
                     minSpeed = (minSpeed+self.maxThreshold)/2
-                else:
-                    self.maxThreshold = minSpeed
-                    minSpeed = (minSpeed+self.minThreshold)/2
+            else:
+                self.maxThreshold = minSpeed
+                minSpeed = (minSpeed+self.minThreshold)/2
+        if stop:
+            print("stop auto simulation")
+        else:
             print("simulate with", minSpeed, maxSpeed)
             self.simulate_(minSpeed, maxSpeed)
         
