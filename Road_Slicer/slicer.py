@@ -88,6 +88,24 @@ def slice(source,target,A4=A4,resize=resize,line_width=line_width,colorBG="black
             else:
                 print("Les images monochromes ne seront pas supprimées automatiquement")
 
+    # Draw some lines
+    y_start = 0
+    y_end = img.height
+    step_size = int(img.width / gw)
+
+    for x in range(0, img.width, step_size):
+        line = ((x, y_start), (x, y_end))
+        img1.line(line, fill=128)
+
+    x_start = 0
+    x_end = img.width
+    step_size = int(img.height / gh)
+
+    for y in range(0, img.height, step_size):
+        line = ((x_start, y), (x_end, y))
+        img1.line(line, fill=128)
+
+    del img1
+
     # Save the entire road
-    img.save(target)
     img.save(source[:-5]+".png")
