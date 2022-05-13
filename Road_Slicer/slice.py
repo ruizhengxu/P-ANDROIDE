@@ -2,10 +2,17 @@ import json
 from PIL import Image, ImageDraw
 from math import ceil
 import numpy as np
+import sys
+import os
+import shutil
 
 line_width = 70
 resize = 20
 A4 = (1463, 1034)
+colorBG="white" #black
+color1="black" #white
+color2="black" #yellow
+dirpath = os.path.realpath(os.path.join(os.path.realpath(__file__), "../output/"))
 
 def getGeometry(A4,white,yellow):
     '''
@@ -109,3 +116,11 @@ def slice(source,target,A4=A4,resize=resize,line_width=line_width,colorBG="black
 
     # Save the entire road
     img.save(source[:-5]+".png")
+
+
+if os.path.exists(dirpath) and os.path.isdir(dirpath):
+    shutil.rmtree(dirpath)
+
+os.mkdir(dirpath)
+
+slice(sys.argv[1],dirpath,colorBG=colorBG,color1=color1,color2=color2)
