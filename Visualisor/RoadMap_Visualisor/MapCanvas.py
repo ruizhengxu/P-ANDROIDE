@@ -82,15 +82,21 @@ class MapCanvas(QWidget):
 
         
     def mouseMoveEvent(self, event):
-        self.parent().setMessage(self.get_pointed_element(event.pos()))
-            
+        e = self.get_pointed_element(event.pos())
+        if e != "":
+            if e in self.sections_name.keys():
+                self.parent().setMessage(self.sections_name[e])
+            else:
+                self.parent().setMessage(e)
+
     def init_obj(self):
         self.sections = {}
         self.intersections = {}
         self.all_elements = {}
         self.selected_section = ""
     
-    def render(self, map_data):
+    def render(self, map_data, section_name):
+        self.sections_name = section_name
         self.get_sections(map_data)
         self.get_intersections(map_data)
         self.get_map_elements(map_data)

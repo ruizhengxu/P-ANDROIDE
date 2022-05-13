@@ -1,3 +1,5 @@
+from posixpath import split
+from re import S
 import Utils, os, sys
 from pathlib import Path
 from PyQt5.QtWidgets import *
@@ -21,9 +23,9 @@ class Road(QWidget):
                          int(screen.size().height()/2)-int(HEIGHT/2)+OFFSET, 
                          WIDTH, HEIGHT)
         
+        self.auto = False
         self.path = os.path.abspath(__file__)
         self.path = str(Path(self.path).parent)
-        self.road = None
         self.road_name = road_name
         self.road_label = QLabel("")
         
@@ -43,7 +45,10 @@ class Road(QWidget):
         self.stop_btn.setDisabled(True)
         self.simulate_btn = QPushButton("Simulate")
         self.simulate_btn.clicked.connect(self.simulate)
+        self.auto_btn = QPushButton("Auto Simulate")
+        self.auto_btn.clicked.connect(self.auto_simulate)
         self.btn_layout.addWidget(self.stop_btn)
+        self.btn_layout.addWidget(self.auto_btn)
         self.btn_layout.addWidget(self.simulate_btn)
 
         self.statusbar = QStatusBar()
@@ -79,6 +84,9 @@ class Road(QWidget):
                 if line.startswith("MIN_LIN"): self.minSpeed = line.split("=")[1].strip()
                 if line.startswith("MAX_LIN"): self.maxSpeed = line.split("=")[1].strip()
         
+        self.optSpeed = float(self.maxSpeed)
+        self.minThreshold = 0.0
+        self.maxThreshold = 10.0
         self.params_layout = QGridLayout()
         self.minSpd_input = QLineEdit()
         self.minSpd_input.setText(self.minSpeed)
@@ -102,47 +110,92 @@ class Road(QWidget):
     
     def stop_simulation(self):
         self.stop_btn.setDisabled(True)
+        self.auto_btn.setDisabled(False)
         self.simulate_btn.setDisabled(False)
-        
+
         if len(self.road_canvas.trajectories) > 5:
-            history = {"MIN_LIN": self.minSpeed, "MAX_LIN": self.maxSpeed,
-            "trajectory": self.road_canvas.trajectories}
-            Utils.save_data_as_json(history, self.road_name)
+            history = {"success": self.road_canvas.isCloseToLastPoint(self.road_canvas.trajectories[-1])
+                        ,"MIN_LIN": self.minSpeed, "MAX_LIN": self.maxSpeed,
+                        "trajectory": self.road_canvas.trajectories}
+            Utils.save_history_as_json(history, self.road_name)
         
+        self.road_canvas.trajectories = []
         quit_path = self.path + "/../quit.sh"
         os.system("bash " + quit_path + " &")
-        print("Stop simulation")
-    
+        print("Stop simulation and save trajectory")
+
+    def auto_simulate(self):
+        self.auto = True
+        self.dichotomy_search(True, False)
+
+    def dichotomy_search(self, first, success):
+
+        # print(first, success)
+        if np.abs(float(self.minSpeed)-self.optSpeed) <= 0.01:
+            data = {"name": self.road_name, "optimal_speed": self.minSpeed}
+            Utils.save_opt_as_json(data, self.road_name)
+        else:
+            if first:
+                self.minThreshold = 0.0
+                self.maxThreshold = 10.0
+                minSpeed = self.minThreshold
+                maxSpeed = self.maxThreshold
+            else:
+                minSpeed = float(self.minSpeed)
+                maxSpeed = float(self.maxSpeed)
+                if success:
+                    self.minThreshold = minSpeed
+                    self.optSpeed = minSpeed
+                    minSpeed = (minSpeed+self.maxThreshold)/2
+                else:
+                    self.maxThreshold = minSpeed
+                    minSpeed = (minSpeed+self.minThreshold)/2
+            print("simulate with", minSpeed, maxSpeed)
+            self.simulate_(minSpeed, maxSpeed)
+        
+    def simulate_(self, minSpeed, maxSpeed):
+        self.minSpd_input.setText(str(minSpeed))
+        self.maxSpd_input.setText(str(maxSpeed))
+        self.setSpeed(minSpeed, maxSpeed)
+        self.launchRobot()
+
     def simulate(self):
+        self.auto = False
         if self.checkParams():
-            path = os.path.abspath(__file__)
-            path = str(Path(path).parent)
-            setup_map_path = path + "/../map/setup_map.py"
-            setup_pose_path = path + "/../pose/setup_pose.py"
-            file_path = path + "/data/" + self.road_name
-            setup_path = path + "/../setup.sh"
-            start_path = self.path + "/../start.sh"
+            print("normal simulate")
+            self.launchRobot()
+    
+    def launchRobot(self):
+        self.stop_btn.setDisabled(False)
+        self.auto_btn.setDisabled(True)
+        self.simulate_btn.setDisabled(True)
 
-            # Handle debug mod
-            if len(sys.argv) > 1:
-                if sys.argv[1] == "-d":
-                    setup_path += " -d"
+        path = os.path.abspath(__file__)
+        path = str(Path(path).parent)
+        setup_map_path = path + "/../map/setup_map.py"
+        setup_pose_path = path + "/../pose/setup_pose.py"
+        file_path = path + "/data/" + self.road_name
+        setup_path = path + "/../setup.sh"
+        start_path = self.path + "/../start.sh"
+        
+        # Handle debug mod
+        if len(sys.argv) > 1:
+            if sys.argv[1] == "-d":
+                setup_path += " -d"
+        
+        os.system("python3 " + setup_map_path + " " + file_path)
+        print("map switched to", self.road_name)
 
-            os.system("python3 " + setup_map_path + " " + file_path)
-            print("map switched to", self.road_name)
+        os.system("python3 " + setup_pose_path + " " + file_path)
+        print("position initialized")
 
-            os.system("python3 " + setup_pose_path + " " + file_path)
-            print("position initialized")
-
-            os.system(setup_path + " &")
-            print("setup success")
-            
-            time.sleep(5) # Wait for 5 seconds before launch autorace
-            
-            os.system("bash " + start_path + " &")
-            self.simulate_btn.setDisabled(True)
-            self.stop_btn.setDisabled(False)
-            print("robot launch with success")
+        os.system(setup_path + " &")
+        print("setup success")
+        
+        time.sleep(5) # Wait for 5 seconds before launch autorace
+        
+        os.system("bash " + start_path + " &")
+        print("robot launch with success")
             
     def checkParams(self):
         error = False
@@ -171,6 +224,11 @@ class Road(QWidget):
             retval = msg.exec_()
             return False
         
+        self.setSpeed(minSpeed, maxSpeed)
+        
+        return True
+
+    def setSpeed(self, minSpeed: float, maxSpeed: float):
         # Edit file when no error
         speed_path = self.path + "/../catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane"
         # speed_path = "control_lane"
@@ -180,14 +238,14 @@ class Road(QWidget):
         f_data = f_data.replace("MAX_LIN = " + self.maxSpeed, "MAX_LIN = " + str(maxSpeed))
         with open(speed_path, "w") as f:
             f.write(f_data)
-            
+           
         self.minSpeed = str(minSpeed)
         self.maxSpeed = str(maxSpeed)
-        
-        return True
 
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)
 
     def closeEvent(self, event):
+        quit_path = self.path + "/../quit.sh"
+        os.system("bash " + quit_path + " &")
         self.road_canvas.ev1.clear()

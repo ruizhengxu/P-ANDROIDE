@@ -45,6 +45,13 @@ class RoadCanvas(QWidget):
                 self.data = json.load(fp)
                 fp.close()
                 time.sleep(1/60)
+                if (self.parent().auto and self.isFinish()):
+                    print("finish")
+                    success = self.isCloseToLastPoint(self.trajectories[-1])
+                    self.parent().stop_simulation()
+                    print("success :", success, "\n")
+                    time.sleep(5)
+                    self.parent().dichotomy_search(False, success=success)
                 self.update()
             except:
                 pass
@@ -76,6 +83,9 @@ class RoadCanvas(QWidget):
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
             path.clear()
+            
+            painter.setPen(QPen(Qt.white))
+            painter.drawEllipse(QPointF(self.last_pt[0], self.last_pt[1]), 2, 2)
         
         ############################################
         # draw last 5 histories' trajectory
@@ -113,8 +123,6 @@ class RoadCanvas(QWidget):
             
             # add trajectory
             self.trajectories.append([x, y])
-            if (len(self.trajectories) > 0 and self.trajectories[len(self.trajectories)-1][0] != x and self.trajectories[len(self.trajectories)-1][1] != y):
-                self.trajectories.remove(len(self.trajectories)-1)
             ############################################
             # draw orientation
             ############################################
@@ -139,8 +147,7 @@ class RoadCanvas(QWidget):
                 right_pt = QPointF(e_pt.x() + 3*normX - 3*perpX, e_pt.y() + 3*normY - 3*perpY)
                 painter.drawPolyline(QPolygonF([left_pt, e_pt, right_pt]))
 
-        
-        #self.update()
+        # #self.update()
         
     def mousePressEvent(self, event):
         self.move_canvas = event.button() == Qt.RightButton
@@ -184,4 +191,31 @@ class RoadCanvas(QWidget):
         for curve in self.list_curves:
             self.white_pts += curve["white"]
             self.yellow_pts += curve["yellow"]
+        self.last_pt = [((self.white_pts[-1]["x"] + self.yellow_pts[-1]["x"])/2) * (self.width()/INIT_SIZE), 
+                        ((self.white_pts[-1]["y"] + self.yellow_pts[-1]["y"])/2) * (self.height()/INIT_SIZE)]
         
+    """
+    Veirfy if robot finish the circuit
+    """
+    def isFinish(self):
+        threshold = 50
+        if len(self.trajectories) > threshold:
+            res = True
+            lastPos = self.trajectories[-1]
+            for traj in self.trajectories[len(self.trajectories)-(threshold+1):len(self.trajectories)-1]:
+                if lastPos != traj:
+                    res = False
+            return res
+        else:
+            return False
+
+    def isCloseToLastPoint(self, currentPos):
+        threshold = 25
+        ax, ay = ((ROAD_SIZE/2) + currentPos[0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - currentPos[1])*(self.height()/ROAD_SIZE)
+        bx, by = self.last_pt[0], self.last_pt[1]
+        dist = np.sqrt((bx-ax)**2 + (by-ay)**2)
+        print(dist)
+        if dist <= threshold:
+            return True
+        else:
+            return False

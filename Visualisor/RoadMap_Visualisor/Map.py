@@ -79,7 +79,7 @@ class Map(QWidget):
         self.file_data = self.read_json(folder_path + file_name)
         self.map_data = self.read_json(self.folder_path + self.file_data["map"])
         self.map_name.setText(self.file_data["map"])
-        self.map_canvas.render(self.map_data)
+        self.map_canvas.render(self.map_data, self.file_data["sections"])
 
     def setMessage(self, msg):
         self.statusbar.showMessage(msg)
