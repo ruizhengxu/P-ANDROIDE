@@ -25,10 +25,11 @@ def transform(x_,y_):
 pos = data['drags'][2]['pos']
 x,y,z = transform(pos['x'],pos['y']) #this will be the position of the robot in gazebo
 
-pos2 = data['drags'][1]['pos']
-x2,y2,z2 = transform(pos2['x'],pos2['y'])
+pt_w = data['list_man'][0]['white'][1]
+pt_y = data['list_man'][0]['yellow'][1]
+x_,y_,z_ = transform((pt_w['x']+pt_y['x'])/2,(pt_w['y']+pt_y['y'])/2)
 
-R,P,Y = 0,0,atan2(y2-y, x2-x) #this will be the orientation of the robot in gazebo
+R,P,Y = 0,0,atan2(y_-y, x_-x) #this will be the orientation of the robot in gazebo
 
 # Write pose in init launch file
 mytree = ET.parse(target)
