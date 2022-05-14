@@ -144,6 +144,7 @@ class Road(QWidget):
             maxSpeed = float(self.maxSpeed)
             if success:
                 if np.abs(minSpeed-self.optSpeed) <= 0.01:
+                    self.optSpeed = minSpeed
                     data = {"name": self.road_name, "optimal_speed": self.optSpeed}
                     Utils.save_opt_as_json(data, self.road_name)
                     stop = True

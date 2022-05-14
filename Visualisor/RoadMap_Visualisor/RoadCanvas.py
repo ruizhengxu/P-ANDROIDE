@@ -75,7 +75,10 @@ class RoadCanvas(QWidget):
                 # Draw white points
                 painter.setPen(QPen(Qt.white, ROAD_WIDTH))
                 pt1 = QPointF(self.white_pts[i]["x"]*(self.width()/INIT_SIZE), self.white_pts[i]["y"]*(self.height()/INIT_SIZE))
-                pt2 = QPointF(self.white_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.white_pts[i+1]["y"]*(self.height()/INIT_SIZE))
+                if i+1 == len(self.white_pts):
+                    pt2 = pt1
+                else:
+                    pt2 = QPointF(self.white_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.white_pts[i+1]["y"]*(self.height()/INIT_SIZE))
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
             path.clear()
@@ -85,13 +88,16 @@ class RoadCanvas(QWidget):
                 # Draw yellow points
                 painter.setPen(QPen(Qt.yellow, ROAD_WIDTH))
                 pt1 = QPointF(self.yellow_pts[i]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[i]["y"]*(self.height()/INIT_SIZE))
-                pt2 = QPointF(self.yellow_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[i+1]["y"]*(self.height()/INIT_SIZE))
+                if i+1 == len(self.yellow_pts):
+                    pt2 = pt1
+                else:
+                    pt2 = QPointF(self.yellow_pts[i+1]["x"]*(self.width()/INIT_SIZE), self.yellow_pts[i+1]["y"]*(self.height()/INIT_SIZE))
                 path.quadTo(pt1, pt2)
             painter.drawPath(path)
             path.clear()
             
-            painter.setPen(QPen(Qt.white))
-            painter.drawEllipse(QPointF(self.last_pt[0], self.last_pt[1]), 2, 2)
+            # painter.setPen(QPen(Qt.white))
+            # painter.drawEllipse(QPointF(self.last_pt[0], self.last_pt[1]), 2, 2)
         
         ############################################
         # draw last 5 histories' trajectory
@@ -204,8 +210,8 @@ class RoadCanvas(QWidget):
         for curve in self.list_curves:
             self.white_pts += curve["white"]
             self.yellow_pts += curve["yellow"]
-        self.last_pt = [((self.white_pts[-1]["x"] + self.yellow_pts[-1]["x"])/2) * (self.width()/INIT_SIZE), 
-                        ((self.white_pts[-1]["y"] + self.yellow_pts[-1]["y"])/2) * (self.height()/INIT_SIZE)]
+        self.last_pt = [((self.white_pts[-1]["x"] + self.yellow_pts[-1]["x"])/2), 
+                        ((self.white_pts[-1]["y"] + self.yellow_pts[-1]["y"])/2)]
         for pt in self.white_pts:
             x = ((pt["x"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
             y = -((pt["y"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
@@ -215,22 +221,10 @@ class RoadCanvas(QWidget):
             y = -((pt["y"]*ROAD_SIZE/1535)-ROAD_SIZE/2)
             self.box.append(QPointF(x,y))
 
-        print("render")
     """
     Verify if robot finish the circuit
     """
     def isFinish(self):
-        # threshold = 400
-        # if len(self.trajectories) > threshold:
-        #     res = True
-        #     lastPos = self.trajectories[-1]
-        #     for traj in self.trajectories[len(self.trajectories)-(threshold+1):len(self.trajectories)-1]:
-        #         if lastPos != traj:
-        #             res = False
-        #     return res
-        # else:
-        #     return False
-
         if(not(self.started)):
             if(len(self.trajectories) > 20):
                 self.started = (norm(np.array(self.trajectories[-1]) - np.array(self.trajectories[-2])) > 0.00005)
@@ -246,7 +240,7 @@ class RoadCanvas(QWidget):
     def isCloseToLastPoint(self, currentPos):
         threshold = 25
         ax, ay = ((ROAD_SIZE/2) + currentPos[0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - currentPos[1])*(self.height()/ROAD_SIZE)
-        bx, by = self.last_pt[0], self.last_pt[1]
+        bx, by = self.last_pt[0]*(self.width()/INIT_SIZE), self.last_pt[1]*(self.height()/INIT_SIZE)
         dist = np.sqrt((bx-ax)**2 + (by-ay)**2)
         print(dist)
         if dist <= threshold:
