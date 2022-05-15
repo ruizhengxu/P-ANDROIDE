@@ -16,6 +16,10 @@ cp .stuff/turtlebot3_autorace.launch catkin_ws/src/turtlebot3_simulations/turtle
 rm catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 cp .stuff/control_lane catkin_ws/src/turtlebot3_autorace/turtlebot3_autorace_control/nodes/control_lane
 
+# Robot physics
+rm catkin_ws/src/turtlebot3/turtlebot3_description/urdf/turtlebot3_burger_for_autorace.gazebo.xacro
+cp .stuff/turtlebot3_burger_for_autorace.gazebo.xacro catkin_ws/src/turtlebot3/turtlebot3_description/urdf/turtlebot3_burger_for_autorace.gazebo.xacro
+
 # make control lane executable
 chmod 777 visualisor.app
 chmod 777 setup.sh
