@@ -45,7 +45,7 @@
         <visual name='ground_vis'>
           <geometry>
             <box>
-              <size>10 10 0</size>
+              <size>10 10 0.01</size>
             </box>
           </geometry>
           <material>
