@@ -143,7 +143,7 @@ class Road(QWidget):
             minSpeed = float(self.minSpeed)
             maxSpeed = float(self.maxSpeed)
             if success:
-                if np.abs(minSpeed-self.optSpeed) <= 0.001:
+                if np.abs(minSpeed-self.optSpeed) <= 0.01:
                     self.optSpeed = minSpeed
                     data = {"name": self.road_name, "optimal_speed": self.optSpeed}
                     Utils.save_opt_as_json(data, self.road_name)
@@ -151,10 +151,10 @@ class Road(QWidget):
                 else:
                     self.minThreshold = minSpeed
                     self.optSpeed = minSpeed
-                    minSpeed = round((minSpeed+self.maxThreshold)/2, 4)
+                    minSpeed = round((minSpeed+self.maxThreshold)/2, 3)
             else:
                 self.maxThreshold = minSpeed
-                minSpeed = round((minSpeed+self.minThreshold)/2, 4)
+                minSpeed = round((minSpeed+self.minThreshold)/2, 3)
         if stop:
             print("stop auto simulation")
         else:

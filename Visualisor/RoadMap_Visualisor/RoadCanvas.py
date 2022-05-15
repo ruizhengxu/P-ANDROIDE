@@ -48,14 +48,14 @@ class RoadCanvas(QWidget):
                 self.data = json.load(fp)
                 fp.close()
                 time.sleep(1/60)
-                if (self.parent().auto and self.isFinish()):
+                if self.isFinish():
                     print("finish")
                     success = self.isCloseToLastPoint(self.trajectories[-1])
                     self.parent().stop_simulation()
                     self.started = False
                     print("success :", success, "\n")
                     # time.sleep(5)
-                    self.parent().dichotomy_search(False, success=success)
+                    if self.parent().auto: self.parent().dichotomy_search(False, success=success)
                 self.update()
             except:
                 pass
