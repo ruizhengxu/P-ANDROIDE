@@ -143,7 +143,7 @@ class Road(QWidget):
             minSpeed = float(self.minSpeed)
             maxSpeed = float(self.maxSpeed)
             if success:
-                if np.abs(minSpeed-self.optSpeed) <= 0.01:
+                if np.abs(minSpeed-self.optSpeed) <= 0.001:
                     self.optSpeed = minSpeed
                     data = {"name": self.road_name, "optimal_speed": self.optSpeed}
                     Utils.save_opt_as_json(data, self.road_name)
@@ -151,10 +151,10 @@ class Road(QWidget):
                 else:
                     self.minThreshold = minSpeed
                     self.optSpeed = minSpeed
-                    minSpeed = (minSpeed+self.maxThreshold)/2
+                    minSpeed = round((minSpeed+self.maxThreshold)/2, 4)
             else:
                 self.maxThreshold = minSpeed
-                minSpeed = (minSpeed+self.minThreshold)/2
+                minSpeed = round((minSpeed+self.minThreshold)/2, 4)
         if stop:
             print("stop auto simulation")
         else:
@@ -172,12 +172,8 @@ class Road(QWidget):
         if self.checkParams():
             print("normal simulate")
             self.launchRobot()
-    
+        
     def launchRobot(self):
-        self.stop_btn.setDisabled(False)
-        self.auto_btn.setDisabled(True)
-        self.simulate_btn.setDisabled(True)
-
         path = os.path.abspath(__file__)
         path = str(Path(path).parent)
         setup_map_path = path + "/../map/setup_map.py"
