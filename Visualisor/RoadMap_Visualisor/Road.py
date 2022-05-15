@@ -70,7 +70,7 @@ class Road(QWidget):
         curve_name = self.road_name.split(".")[0]
         his_path = self.path + "/histories/"
         all_curves_files = [f for f in os.listdir(his_path) if os.path.isfile(os.path.join(his_path, f)) and f.startswith(curve_name)]
-        for curve_file in all_curves_files:
+        for curve_file in all_curves_files[-5:]:
             data = Utils.read_json(his_path+curve_file)
             histories.append(data)
 
