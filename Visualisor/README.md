@@ -1,4 +1,6 @@
 ## Initialisation du projet
+Le Visualisor est développé pour Linux 16.04. Une autre version de Linux ne fonctionnera pas à cause des dépences des packages ROS utilisés.
+
 - Vérifier que Gazebo est bien installé
 - Vérifier que ROS Kinetic est bien installé (http://wiki.ros.org/kinetic/Installation/Ubuntu)
 - Vérifier que catkin pour ROS Kinetic est bien installé (http://wiki.ros.org/catkin)
