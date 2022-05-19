@@ -17,7 +17,7 @@ def getClass(A,B,C):
     Function to get the class of a bezier quadratic curve from its control points
     '''
 
-    # # ANGLE AND DISTANCE TO CRITIC POINT
+    ##### ANGLE AND DISTANCE TO CRITIC POINT
     # BA = A - B
     # BC = C - B
     # angle = int(round(np.degrees(np.arccos(np.dot(BA, BC) / (np.linalg.norm(BA) * np.linalg.norm(BC))))))
@@ -35,15 +35,24 @@ def getClass(A,B,C):
     # scores = [100, 200, 300, 800, 1100, 1400, 1700, 2000]
 
 
-    # CURVATURE
-    curvature = 1/abs(norm(C - 2*B + A)**2 / (2 * det(np.array([B - A, C - B]))))
-    print(curvature)
+
+    ##### ANGLE
+    # BA = A - B
+    # BC = C - B
+    # score = int(round(np.degrees(np.arccos(np.dot(BA, BC) / (np.linalg.norm(BA) * np.linalg.norm(BC))))))
+    # scores = [20, 40, 60, 80, 100, 120, 140, 160]
+
+
+
+
+    ##### CURVATURE
+    score = 1/abs(norm(C - 2*B + A)**2 / (2 * det(np.array([B - A, C - B]))))
     # scores = [0.12, 0.16, 0.24, 0.34, 0.44, 0.47, 0.56, 0.97, 1.33]
     scores = [0.16, 0.34, 0.47, 0.97, 1.33]
 
 
     for i in range(len(scores)):
-        if(curvature <= scores[i]):
+        if(score <= scores[i]):
             return i
     return len(scores)
 
