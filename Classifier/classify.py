@@ -32,52 +32,19 @@ def getClass(A,B,C):
     # print(distance,angle)
     
     # score = round(distance*angle/100)
-    # print(score)
-
-    # if(score < 100):
-    #     value = 0
-    # elif(score < 200):
-    #     value = 1
-    # elif(score < 300):
-    #     value = 3
-    # elif(score < 800):
-    #     value = 4
-    # elif(score < 1100):
-    #     value = 5
-    # elif(score < 1400):
-    #     value = 6
-    # elif(score < 1700):
-    #     value = 7
-    # elif(score < 2000):
-    #     value = 8
-    # else:
-    #     value = 9
+    # scores = [100, 200, 300, 800, 1100, 1400, 1700, 2000]
 
 
     # CURVATURE
     curvature = 1/abs(norm(C - 2*B + A)**2 / (2 * det(np.array([B - A, C - B]))))
-    if(curvature < 0.2):
-        value = 0
-    elif(curvature < 0.3):
-        value = 1
-    elif(curvature < 0.5):
-        value = 2
-    elif(curvature < 0.8):
-        value = 3
-    elif(curvature < 1.3):
-        value = 4
-    elif(curvature < 1.8):
-        value = 5
-    elif(curvature < 2.5):
-        value = 6
-    elif(curvature < 3.4):
-        value = 7
-    elif(curvature < 6):
-        value = 8
-    else:
-        value = 9
+    print(curvature)
+    scores = [0.12, 0.16, 0.24, 0.34, 0.44, 0.47, 0.56, 0.97, 1.33]
 
-    return value
+
+    for i in range(len(scores)):
+        if(curvature <= scores[i]):
+            return i
+    return len(scores)
 
 def classify(source):
     '''

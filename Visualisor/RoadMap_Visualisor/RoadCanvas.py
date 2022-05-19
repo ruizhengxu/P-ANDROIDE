@@ -238,7 +238,7 @@ class RoadCanvas(QWidget):
         return res
 
     def isCloseToLastPoint(self, currentPos):
-        threshold = 25
+        threshold = 15
         ax, ay = ((ROAD_SIZE/2) + currentPos[0])*(self.width()/ROAD_SIZE), ((ROAD_SIZE/2) - currentPos[1])*(self.height()/ROAD_SIZE)
         bx, by = self.last_pt[0]*(self.width()/INIT_SIZE), self.last_pt[1]*(self.height()/INIT_SIZE)
         dist = np.sqrt((bx-ax)**2 + (by-ay)**2)
