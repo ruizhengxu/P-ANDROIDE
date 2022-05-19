@@ -38,7 +38,8 @@ def getClass(A,B,C):
     # CURVATURE
     curvature = 1/abs(norm(C - 2*B + A)**2 / (2 * det(np.array([B - A, C - B]))))
     print(curvature)
-    scores = [0.12, 0.16, 0.24, 0.34, 0.44, 0.47, 0.56, 0.97, 1.33]
+    # scores = [0.12, 0.16, 0.24, 0.34, 0.44, 0.47, 0.56, 0.97, 1.33]
+    scores = [0.16, 0.34, 0.47, 0.97, 1.33]
 
 
     for i in range(len(scores)):

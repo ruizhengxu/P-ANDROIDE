@@ -20,7 +20,7 @@ En pratique, cette commande permet de remplacer certain fichiers du catkin works
 <del>Pour lancer l'interface, taper la commande : `python3 RoadMap_Visualisor/MainWindow.py` depuis le dossier `Visualisor/`. Les premières fois Gazebo peut paraitre capricieux donc ne pas hésiter à relancer le visualisor ou à lancer une fois Gazebo seul puis fermer la fenêtre avant de réessayer.</del>
 
 * `./visualisor.app` pour lancer l'application: `--debug` ou `-d` pour avoir les affichages des différentes commandes **ROS** dans des terminaux (deviens vite chaotique).
-* Une fois la carte choisi, nous voyons notre robot sur la carte (représenté par un anneau jaune).
-* Ensuite cliquer sur le bouton ***Simuler*** de l'application pour lancer la simulation. --> WIP: automatiser le placement / lancement [cf issue de Luka](https://github.com/ruizhengxu/P-ANDROIDE/issues/1)
+* L'utilisateur sélectionne un fichier de jointure `join` qui contient plusieurs sections
+* Une fois la section choisie, nous voyons notre robot sur la route (représenté par un anneau jaune).
+* Ensuite cliquer sur le bouton ***Simulate*** de l'application pour lancer la simulation ou alors ***Auto simulate*** pour une automatisation des simulations sur une même route.
 * Pour quitter l'application proprement, il suffit de fermer les fenêtre de l'application (tous les programmes invoqués comme les processus **ROS**, **Gazebo** etc. seront tués).
-* Pour changer de carte / simulation, il faut relancer l'application. WIP changer dynamiquement sans relancer l'appli [cf issue d'Etienne](https://github.com/ruizhengxu/P-ANDROIDE/issues/6) & [cf issue de Ruizheng](https://github.com/ruizhengxu/P-ANDROIDE/issues/13)

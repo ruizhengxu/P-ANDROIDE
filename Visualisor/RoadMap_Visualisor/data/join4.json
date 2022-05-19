@@ -1,0 +1,22 @@
+{
+  "map" : "simpleMap.json",
+  "sections" : {
+      "object:38" : "176.json",
+      "object:39" : "177.json",
+      "object:40" : "178.json",
+      "object:41" : "179.json",
+      "object:42" : "180.json",
+      "object:43" : "181.json",
+      "object:44" : "182.json",
+      "object:45" : "183.json",
+      "object:46" : "184.json",
+      "object:47" : "185.json",
+      "object:48" : "186.json",
+      "object:49" : "187.json",
+      "object:50" : "188.json",
+      "object:51" : "189.json",
+      "object:52" : "190.json",
+      "object:53" : "191.json",
+      "object:54" : "192.json"
+  }
+}
