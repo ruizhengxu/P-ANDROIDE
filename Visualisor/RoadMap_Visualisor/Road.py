@@ -182,6 +182,10 @@ class Road(QWidget):
         setup_path = path + "/../setup.sh"
         start_path = self.path + "/../start.sh"
         
+        self.stop_btn.setDisabled(False)
+        self.auto_btn.setDisabled(True)
+        self.simulate_btn.setDisabled(True)
+        
         # Handle debug mod
         if len(sys.argv) > 1:
             if sys.argv[1] == "-d":
