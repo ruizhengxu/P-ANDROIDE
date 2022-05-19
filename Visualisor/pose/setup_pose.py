@@ -1,3 +1,8 @@
+# Ce script permet d'initialiser la position et l'orientation du turtlebot dans Gazebo
+# 
+# Le script prend en paramètre un fichier au format .json (route exportée par le Road Editor) 
+# et place le turtlebot au début de cette route dans la bonne direction
+
 import json
 from math import atan2
 import os

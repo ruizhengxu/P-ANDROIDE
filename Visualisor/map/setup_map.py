@@ -1,3 +1,7 @@
+# Ce script permet de modifier la map de l'environnement sur Gazebo
+# 
+# Le script prend en paramètre un fichier au format .json (route exportée par le Road Editor)
+
 import json
 from PIL import Image, ImageDraw
 from math import ceil

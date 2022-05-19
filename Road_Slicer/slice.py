@@ -1,3 +1,11 @@
+# Ce script découpe une route du Road Editor (format .json) en parties au format A4 prêt à l'impression à l'échelle du Turtlebot réel.
+#
+# Pour lancer la découpe taper `python3 slice.py path.json` où `path.json` est le chemin vers le fichier désiré. 
+# Les images seront sauvegardées au format A4 dans le dossier `output/`.
+#
+# Il est possible de changer certain paramètres (couleurs, échelle, etc...) ci-dessous.
+
+
 import json
 from PIL import Image, ImageDraw
 from math import ceil

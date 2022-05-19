@@ -1,14 +1,14 @@
+# Ce script permet d'attribuer une classe à chaque route d'un dossier passé en argument.
+#
+# Il prend donc un dossier en argument contenant les routes à classer au format .json (du Road Editor).
+# La classe associée à la route est directement ajoutée à son fichier.
+
 import numpy as np
 import sys
 import json
 import os
 from numpy.linalg import norm, det
 from PIL import Image, ImageDraw
-
-'''
-Classifies a whole folder of json curves
-Folder path should be given in parameter when calling classify.py
-'''
 
 def getClass(A,B,C):
     '''

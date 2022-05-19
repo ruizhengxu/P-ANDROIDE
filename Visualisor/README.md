@@ -7,15 +7,15 @@ Lors d'une première utilisation, il est nécessaire de taper les deux commandes
 
 ### Initialisation de catkin
 Pour initialiser catkin taper la commande : `bash setup_catkin.sh` depuis le dossier `Visualisor/`.
+Ceci permet d'installer toutes les dépendances ROS du projet en local et initialise le catkin workspace.
+À la suite de cette procédure, un dossier `catkin_ws/` à dû apparaitre dans `Visualisor/`.
 
 ### Modification des fichiers de catkin
 Pour adapter les fichiers dans `catkin_ws/` à notre projet taper la commande : `bash modif_catkin.sh` depuis le dossier `Visualisor/`.
-
-
-
+En pratique, cette commande permet de remplacer certain fichiers du catkin workspace local par les fichiers modifiers du dossier `.stuff` nécessaires au bon fonctionnement du Visualisor.
 
 ## Lancer le visualisor (commandless)
-<del>Pour lancer l'interface, taper la commande : `python3 RoadMap_Visualisor/MainWindow.py` depuis le dossier `Visualisor/`. Les premières fois Gazebo peut paraitre capricieux donc ne pas hésiter à relancer le visualisor.</del>
+<del>Pour lancer l'interface, taper la commande : `python3 RoadMap_Visualisor/MainWindow.py` depuis le dossier `Visualisor/`. Les premières fois Gazebo peut paraitre capricieux donc ne pas hésiter à relancer le visualisor ou à lancer une fois Gazebo seul puis fermer la fenêtre avant de réessayer.</del>
 
 * `./visualisor.app` pour lancer l'application: `--debug` ou `-d` pour avoir les affichages des différentes commandes **ROS** dans des terminaux (deviens vite chaotique).
 * Une fois la carte choisi, nous voyons notre robot sur la carte (représenté par un anneau jaune).
