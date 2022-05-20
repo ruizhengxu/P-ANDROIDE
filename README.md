@@ -8,3 +8,6 @@ Le *Classifier* permet d'attribuer une classe à une courbe de Bézier quadratiq
 
 ## Road_Slicer
 Le *Road_Slicer* est un outil qui permet de faciliter l'impression d'une route à taille réelle (avec une imprimante au format A4) pour le Turtlebot. Plus d'informations dans `Road_Slicer/slice.py`.
+
+## Evaluation
+Dossier contenant l'étude des résultats obtenus avec les tests de simulation.
