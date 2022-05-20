@@ -16,11 +16,10 @@ Ceci permet d'installer toutes les dépendances ROS du projet en local et initia
 Pour adapter les fichiers dans `catkin_ws/` à notre projet taper la commande : `bash modif_catkin.sh` depuis le dossier `Visualisor/`.
 En pratique, cette commande permet de remplacer certain fichiers du catkin workspace local par les fichiers modifiers du dossier `.stuff` nécessaires au bon fonctionnement du Visualisor.
 
-## Lancer le visualisor (commandless)
-<del>Pour lancer l'interface, taper la commande : `python3 RoadMap_Visualisor/MainWindow.py` depuis le dossier `Visualisor/`. Les premières fois Gazebo peut paraitre capricieux donc ne pas hésiter à relancer le visualisor ou à lancer une fois Gazebo seul puis fermer la fenêtre avant de réessayer.</del>
-
+## Lancer le visualisor
 * `./visualisor.app` pour lancer l'application: `--debug` ou `-d` pour avoir les affichages des différentes commandes **ROS** dans des terminaux (deviens vite chaotique).
 * L'utilisateur sélectionne un fichier de jointure `join` qui contient plusieurs sections
-* Une fois la section choisie, nous voyons notre robot sur la route (représenté par un anneau jaune).
+* Une fois la section choisie, nous voyons notre robot sur la route.
 * Ensuite cliquer sur le bouton ***Simulate*** de l'application pour lancer la simulation ou alors ***Auto simulate*** pour une automatisation des simulations sur une même route.
+* Pour arrêter la simulation cliquer sur ***Stop simulation*** ou bien fermer la fenêtre.
 * Pour quitter l'application proprement, il suffit de fermer les fenêtre de l'application (tous les programmes invoqués comme les processus **ROS**, **Gazebo** etc. seront tués).
